@@ -1,6 +1,6 @@
 package v1;
 
-public class Exercise implements Scheduleable {
+public class Exercise  {
 
 	private String name;
 
@@ -22,7 +22,7 @@ public class Exercise implements Scheduleable {
 	}
 	
 	//Eventually override this so that Rep or Aerobic exercises can display their types?
-	public String getString() {
+	public String toString() {
 		return name;
 	}
 
