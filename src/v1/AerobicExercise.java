@@ -19,7 +19,7 @@ public class AerobicExercise extends Exercise implements Scheduleable {
 	
 	
 	/**
-	 * returns the start time and the end time of a passed exercise when started at the passed time
+	 * returns the start time and the end time of a passed exercise when started at the time passed to the method
 	 * @param exercise the exercise that needs to be scheduled
 	 * @param startTime the time for the exercise to start
 	 * @return A LocalTime array. element [0] is the start time and element [1] is the end time
@@ -28,7 +28,7 @@ public class AerobicExercise extends Exercise implements Scheduleable {
 		LocalTime[] times = new LocalTime[2];
 		times[0] = startTime;
 		times[1] = startTime.plusHours(this.duration[0]).plusMinutes(this.duration[1]);
-		return null;
+		return times;
 		
 
 	}
