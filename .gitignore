@@ -13,3 +13,5 @@ src/v1/RepExercise.class
 src/v1/Scheduleable.class
 src/v1/TextInput.class
 src/v1/User.class
+src/v1/AerobicExercise.class
+*.class
