@@ -1,9 +1,8 @@
-package v4;
+package v5;
 
-public class Scheduleable {
+import java.time.LocalTime;
 
-	public Scheduleable() {
-		// TODO Auto-generated constructor stub
-	}
-
+public interface Scheduleable{
+	
+	LocalTime[] schedule(AerobicExercise exercise, LocalTime startTime);
 }
