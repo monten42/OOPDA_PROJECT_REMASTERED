@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 public class App {
 	// Catalogs for foodItems and exercises
@@ -22,9 +24,11 @@ public class App {
 	 * Generic constructor for Application
 	 */
 	public App(Stage stage) {
+		
+		Dashboard.show();
 		FileIO.fileIO();
-		setupUser();
-		userEnvironment();
+		//setupUser();
+		//userEnvironment();
 		
 	}
 
