@@ -1,24 +1,15 @@
-package v1;
+package v4;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
+public class Driver {
 
-public class Driver extends Application{
-
-	/**
-	 * Main method
-	 */
 	public static void main(String[] args) {
-		launch(args);
-	}
-	
-	/**
-	 * Start method makes a new application
-	 */
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		App app = new App(primaryStage);
-		
+		DailyLog log = new DailyLog(2000);
+		Food egg = new Food("Egg", 100);
+		Food porkroll = new Food("Porkroll", 100);
+		log.addFood(egg);
+		log.addFood(porkroll);
+		System.out.println(log.basicInfo());
+		System.out.println(log.foodInfo());
 	}
 
 }

@@ -1,8 +1,8 @@
 package v4;
 
-public class Exercise {
+public class CardioExercise {
 
-	public Exercise() {
+	public CardioExercise() {
 		// TODO Auto-generated constructor stub
 	}
 

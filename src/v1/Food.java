@@ -1,9 +1,9 @@
-package v1;
+package v4;
 
-public class FoodItem {
+public class Food {
 	private String name;
 	private int calories;
-	public FoodItem(String name, int calories) {
+	public Food(String name, int calories) {
 		this.name = name;
 		this.calories = calories;
 	}
@@ -32,8 +32,8 @@ public class FoodItem {
 		this.calories = calories;
 	}
 	
-	public String getString() {
-		return name + " : " + calories;
+	public String toString() {
+		return name + ": " + calories;
 	}
 
 }

@@ -1,5 +1,9 @@
-package v1;
+package v4;
 
-public interface Scheduleable{
-	
+public class Scheduleable {
+
+	public Scheduleable() {
+		// TODO Auto-generated constructor stub
+	}
+
 }

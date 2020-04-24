@@ -1,9 +1,9 @@
-package v1;
+package v4;
 
-public class RepExercise extends Exercise {
+public class RepExercise {
 
-	public RepExercise(String name) {
-		super(name);
+	public RepExercise() {
+		// TODO Auto-generated constructor stub
 	}
 
 }

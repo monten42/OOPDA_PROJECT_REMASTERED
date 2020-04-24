@@ -1,4 +1,4 @@
-package v1;
+package v4;
 
 import java.io.Serializable;
 
@@ -11,7 +11,7 @@ public class User implements Serializable{
 	private static final long serialVersionUID = 3999007488314647320L;
 	private String name, gender, username;
 	private int age, height, weight;
-	private HealthLogger logger;
+	private DailyLog logger;
 	
 	public User(String username, String name, String gender, int age, int height, int weight, int calorieLimit) {
 		this.username = username;
@@ -20,7 +20,7 @@ public class User implements Serializable{
 		this.age = age;
 		this.height = height;
 		this.weight = weight;
-		logger = new HealthLogger(calorieLimit, weight, height);
+		logger = new DailyLog(calorieLimit);
 	}
 	
 	public User() {
@@ -79,7 +79,10 @@ public class User implements Serializable{
 	public void setWeight(int weight) {
 		this.weight = weight;
 	}
-
+	
+	public void setLogger(DailyLog logger) {
+		this.logger = logger;
+	}
 	public String printInfo() {
 		return("Name: " + name + "\nGender: " + gender +
 						   "\nAge: " + age + "\nHeight: " + height + 
@@ -90,18 +93,9 @@ public class User implements Serializable{
 		System.out.println("------------DASHBOARD------------");
 		System.out.println("Name: " + name);
 		System.out.println("Last recorded weight: " + weight);
-		System.out.println("Calories consumed today: " + logger.getCalorieCount() + " / " + logger.getCalorieLimit());
-		System.out.println("Daily challenges completed: ");
+		System.out.println("Calories consumed today: " + logger.getCaloriesConsumed() + " / " + logger.getCalorieLimit());
 		System.out.println("---------------------------------");
 		
-	}
-
-	public HealthLogger getLogger() {
-		return logger;
-	}
-
-	public void setLogger(HealthLogger logger) {
-		this.logger = logger;
 	}
 
 }
