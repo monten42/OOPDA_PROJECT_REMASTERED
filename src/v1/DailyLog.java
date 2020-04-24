@@ -1,6 +1,8 @@
 package v1;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 /**
  * More accessible daily log information, before it is transferred to the History class for more concrete storage
@@ -10,51 +12,23 @@ import java.io.Serializable;
 public class DailyLog implements Serializable{
 	
 	/**
-	 * Default Serialize ID
+	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2602357011051485005L;
+	LocalDate date;
+    int caloriesConsumed, calorieLimit, caloriesBurned;
+    ArrayList<FoodItem> foodsEaten;
+    ArrayList<Exercise> exercises;
 
-	/**
-	 * Field for the amount of caloriesBurned
-	 */
-	private int caloriesBurned;
-	
-	/**
-	 * Field for the total calorie limit for the day
-	 */
-	private int caloriesLimit;
-	
-	/**
-	 * Field for the calories eaten
-	 */
-	private int caloriesEaten;
-	
-	/**
-	 * Field for user's history
-	 */
-	private History history;
-	
-	/**
-	 * Constructs a DailyLog object with all value at 0 and the history set
-	 */
-	public DailyLog() {
-		caloriesBurned = 0;
-		caloriesLimit = 0;
-		caloriesEaten = 0;
-		history = new History();
-		
-	}
-	
-	/**
-	 * Constructs a DailyLog object with a preset calorie limit, the history set, and the rest of the values set to 0
-	 * @param caloriesTotal
-	 */
-	public DailyLog(int caloriesTotal, String filepath) {
-		this.caloriesLimit = caloriesTotal;
-		this.caloriesEaten = 0;
-		this.caloriesBurned = 0;
-		history = new History();
-	}
+    public DailyLog(int calorieLimit) {
+        date = LocalDate.now();
+        this.calorieLimit = calorieLimit;
+        caloriesConsumed = 0;
+        caloriesBurned = 0;
+        foodsEaten = new ArrayList<>(5);
+        exercises = new ArrayList<>(5);
+    }
+
 	
 	/**
 	 * Standard getter for calories burned
@@ -76,64 +50,66 @@ public class DailyLog implements Serializable{
 	 * standard getter for calories total
 	 * @return claories limit as an int
 	 */
-	public int getCaloriesLimit() {
-		return caloriesLimit;
+	public int getcalorieLimit() {
+		return calorieLimit;
 	}
 
 	/**
 	 * standard setter for  Calorie limit
 	 * @param caloriesTotal
 	 */
-	public void setCaloriesLimit(int caloriesTotal) {
-		this.caloriesLimit = caloriesTotal;
+	public void setcalorieLimit(int caloriesTotal) {
+		this.calorieLimit = caloriesTotal;
 	}
 
 	/**
 	 * standard getter for calories eaten
 	 * @return calories eaten as an int
 	 */
-	public int getCaloriesEaten() {
-		return caloriesEaten;
+	public int getcaloriesConsumed() {
+		return caloriesConsumed;
 	}
 
 	/**
 	 * standard setter for calories eaten
-	 * @param caloriesEaten
+	 * @param caloriesConsumed
 	 */
-	public void setCaloriesEaten(int caloriesEaten) {
-		this.caloriesEaten = caloriesEaten;
-	}
-	
-	public void logData() {
-		history.log("caloriesEaten", Integer.toString(this.caloriesEaten));
-		history.log("calorieLimie", Integer.toString(this.caloriesLimit));
-		history.log("caloriesBurned", Integer.toString(this.caloriesBurned));
-	}
-	
-	public void finishDay() {
-		history.logDate();
-	}
-	
-	public String toString() {
-		return ("Calories eaten: " + this.caloriesEaten + ", Calories burned: " + this.caloriesBurned + ", Calorie limit: " + this.caloriesLimit);
-		
-	}
-	
-	/**
-	 * Standard getter for the history field
-	 * @return the history of the daily log as a History object
-	 */
-	public History getHistory() {
-		return this.history;
-	}
-	
-	/**
-	 * Standard setter for the history filed
-	 * @param newHistory
-	 */
-	public void setHistory(History newHistory) {
-		this.history = newHistory;
+	public void setcaloriesConsumed(int caloriesConsumed) {
+		this.caloriesConsumed = caloriesConsumed;
 	}
 	
 	
+	
+	public String basicInfo() {
+        return "Date: " + date + 
+                "\nCalories Consumed: " + caloriesConsumed + "/" + calorieLimit +
+                "\nCalories Burned: " + caloriesBurned;
+    }
+
+    public void addFood(FoodItem food) {
+        foodsEaten.add(food);
+        caloriesConsumed += food.getCalories();
+    }
+
+    public void addExercise(Exercise exercise) {
+        exercises.add(exercise);
+        //caloriesBurned += exercise.getCalories();
+    }
+
+    public String foodInfo() {
+        String foods = "";
+        for(FoodItem food : foodsEaten) {
+            foods = foods + food.toString() + "\n";
+        }
+        return foods;
+    }
+
+    public String exerciseInfo() {
+        String workouts = "";
+        for(Exercise exercise : exercises) {
+            workouts = workouts + exercise.toString() + "\n";
+        }
+        return workouts;
+    }
+
 }
