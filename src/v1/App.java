@@ -10,9 +10,7 @@ import java.util.Set;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 public class App {
-	// Catalogs for foodItems and exercises
-	private FoodCatalog food;
-	private ExerciseCatalog exercises;
+
 	// Array for challenge exercises of the day
 	private Exercise[] challengeExercises = new Exercise[3];
 	// If application is running or not
@@ -33,9 +31,10 @@ public class App {
 	}
 
 	/**
+	/**
 	 * Make sure currentUser gets set
 	 * If no users exist you can create one then select it
-	 */
+	 
 	private void setupUser() {
 		boolean running = true;
 		int option; 
@@ -61,13 +60,14 @@ public class App {
 		}
 		
 	}
+	
 
 	/**
 	 * Presents a window to user where all users are displayed on buttons
 	 * Button pressed on will determine what user is returned
 	 *
 	 * @return Chosen user
-	 */
+	 
 	private User promptChooseUser(){
 		ArrayList<String> userList = FileIO.usernames();
 		int userNum = ButtonOptions.show("Pick an Option", userList);
@@ -77,7 +77,7 @@ public class App {
 	/**
 	 * Presents 6 windows to user in succession to enter various details (will make this not require 6 windows some time soon)
 	 * A user object is created and stored from these details
-	 */
+	 *
 	private void promptCreateUser() {
 		String username = TextInput.show("UserName Prompt", "Choose a Username:");
 		while(FileIO.usernames().contains(username)) {
@@ -125,6 +125,8 @@ public class App {
 		}
 		
 	}
+	*/
+
 
 	private void saveNewUser(User user) {
 		//FileIO.createNewUser(user.getUsername());

@@ -8,6 +8,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -57,16 +58,25 @@ public class Dashboard {
 			btn.setMinWidth(sW / buttons.size());
 		}
 
-		btnPane.setAlignment(Pos.BOTTOM_CENTER);
 		btnPane.getChildren().addAll(btn1, btn2, btn3, btn4, btn5);
 		mainPane.setBottom(btnPane);
+		stage.setResizable(false);
+		
+		
+		
 		stage.setScene(new Scene(mainPane));
+		setLogin();
+		
 		stage.showAndWait();
+		
 
 	}
 
 	private static void setLogin() {
-
+		displayPane = new HBox();
+		
+		displayPane.getChildren().add(new Label("HELLO"));
+		resetAndShow();
 	}
 
 	/**
@@ -74,11 +84,40 @@ public class Dashboard {
 	 */
 	private static void setDailyLog() {
 
-		Label lbl1 = new Label("daily log!");
-		Label lbl2 = new Label("Wow!");
+
+		HBox choices = new HBox();
+		HBox lists = new HBox(50);
+
+		ComboBox<String> history = new ComboBox<String>();
+		history.getItems().addAll("Choice 1", "Choice 2", "Choice 3");
+		history.setEditable(true);
+		Button b = new Button("Press");
+		Label calorieInfo = new Label("Calories");
+		Label foods = new Label("Foods");
+		Label exercises = new Label("Exercises");
+
+		lists.setAlignment(Pos.CENTER);
+		choices.setAlignment(Pos.CENTER);
+		calorieInfo.setAlignment(Pos.CENTER);
+		lists.getChildren().addAll(foods, exercises);
+		choices.getChildren().addAll(history, b);
+
+		// b.setOnAction(e ->
+		// calorieInfo.setText(fileIO.getHistory(history.getValue()).basicInfo));
+		// b.setOnAction(e ->
+		// foods.setText(fileIO.getHistory(history.getValue()).foodInfo));
+		// b.setOnAction(e ->
+		// exercises.setText(fileIO.getHistory(history.getValue()).exerciseInfo));
+
 		displayPane = new BorderPane();
-		((BorderPane) displayPane).setLeft(lbl1);
-		((BorderPane) displayPane).setRight(lbl2);
+		((BorderPane) displayPane).setTop(choices);
+		((BorderPane) displayPane).setCenter(calorieInfo);
+		((BorderPane) displayPane).setBottom(lists);
+
+		
+
+		// ((BorderPane) displayPane).setBottom(lbl2);
+		// ((BorderPane) displayPane).setTop(lbl2);
 		resetAndShow();
 
 	}
@@ -92,7 +131,7 @@ public class Dashboard {
 		Label lbl2 = new Label("Wow!");
 		displayPane = new BorderPane();
 		((BorderPane) displayPane).setCenter(lbl1);
-		((BorderPane) displayPane).setTop(lbl2);
+		((BorderPane) displayPane).setBottom(lbl2);
 		resetAndShow();
 
 	}
@@ -142,7 +181,7 @@ public class Dashboard {
 	 */
 	private static void resetAndShow() {
 		mainPane.getChildren().clear();
-		mainPane.setTop(displayPane);
+		mainPane.setCenter(displayPane);
 		mainPane.setBottom(btnPane);
 	}
 }
