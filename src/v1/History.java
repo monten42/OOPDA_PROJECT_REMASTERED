@@ -26,17 +26,13 @@ public class History implements Serializable {
 	 */
 	public HashMap<String, String> logCurrentDate;
 	
-	/**
-	 * Username to which the History belongs to
-	 */
-	private String username;
 	
 	/**
-	 * Constructs a History object with the associated username
-	 * @param username
+	 * Constructs a History object with empty logs
 	 */
-	public History(String username) {
-		this.setUsername(username);
+	public History() {
+		logs = new HashMap<LocalDate, String>();
+		logCurrentDate = new HashMap<String, String>();
 	}
 	
 	/**
@@ -151,21 +147,7 @@ public class History implements Serializable {
 		
 	}
 
-	/**
-	 * Standard getter for Username field
-	 * @return username as a string
-	 */
-	public String getUsername() {
-		return username;
-	}
-	
-	/**
-	 * Standard setter for username field
-	 * @param username
-	 */
-	public void setUsername(String username) {
-		this.username = username;
-	}
+
 		
 		
 	
