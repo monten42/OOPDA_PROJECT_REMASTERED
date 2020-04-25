@@ -204,7 +204,7 @@ public class FileIO {
 	public static void addFood(FoodItem food) {
 		try {
 			Writer writer = new FileWriter("Admin\\Food Catalog.txt", APPEND_MODE);
-			writer.write(food.getString() + "\n");
+			writer.write(food.toString() + "\n");
 			writer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -214,7 +214,7 @@ public class FileIO {
 	public static void addPersonalFood(FoodItem food, String username) {
 		try {
 			Writer writer = new FileWriter("Admin\\"+username + "\\PersonalFoods.txt", APPEND_MODE);
-			writer.write(food.getString() + "\n");
+			writer.write(food.toString() + "\n");
 			writer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -262,7 +262,7 @@ public class FileIO {
 	public static void addExercise(Exercise exercise) {
 		try {
 			Writer writer = new FileWriter("Admin\\Exercise Catalog.txt", APPEND_MODE);
-			writer.write(exercise.getString() + "\n");
+			writer.write(exercise.toString() + "\n");
 			writer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -272,7 +272,7 @@ public class FileIO {
 	public static void addPersonalExercise(Exercise exercise, String username) {
 		try {
 			Writer writer = new FileWriter("Admin\\"+username + "\\PersonalExercises.txt", APPEND_MODE);
-			writer.write(exercise.getString() + "\n");
+			writer.write(exercise.toString() + "\n");
 			writer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
