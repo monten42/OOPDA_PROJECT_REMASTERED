@@ -259,16 +259,7 @@ public class FileIO {
 		}
 		return exercises;
 	}
-	public static void addExercise(Exercise exercise) {
-		try {
-			Writer writer = new FileWriter("Admin\\Exercise Catalog.txt", APPEND_MODE);
-			writer.write(exercise.toString() + "\n");
-			writer.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+
 	public static void addPersonalExercise(Exercise exercise, String username) {
 		try {
 			Writer writer = new FileWriter("Admin\\"+username + "\\PersonalExercises.txt", APPEND_MODE);
