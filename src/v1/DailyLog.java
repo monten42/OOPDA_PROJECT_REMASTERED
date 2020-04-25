@@ -19,6 +19,7 @@ public class DailyLog implements Serializable{
     int caloriesConsumed, calorieLimit, caloriesBurned;
     ArrayList<FoodItem> foodsEaten;
     ArrayList<Exercise> exercises;
+
     public DailyLog(int calorieLimit) {
         date = LocalDate.now();
         this.calorieLimit = calorieLimit;

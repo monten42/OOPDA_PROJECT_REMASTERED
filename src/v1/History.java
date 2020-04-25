@@ -19,125 +19,133 @@ public class History implements Serializable {
 	/**
 	 * Data corresponding to dates
 	 */
-	private HashMap<LocalDate, DailyLog> previousDailylogs;
+	private HashMap<LocalDate, String> logs;
 	
 	/**
 	 * Data from the current day
 	 */
-	public DailyLog currentDailyLog;
-	
-	public int calorieLimit;
-	
+	public HashMap<String, String> logCurrentDate;
 	
 	
 	/**
-	 * Constructs a History object with empty logs and currentLog
-	 * @param calorieLimit for the logs
+	 * Constructs a History object with empty logs
 	 */
-	public History(int calorieLimit) {
-		previousDailylogs = new HashMap<LocalDate, DailyLog>();
-		currentDailyLog = new DailyLog(calorieLimit);
-		this.calorieLimit = calorieLimit;
+	public History() {
+		logs = new HashMap<LocalDate, String>();
+		logCurrentDate = new HashMap<String, String>();
 	}
-	
 	
 	/**
 	 * Pushed the logged data from the current date to an archived, previous date format in the logs field
-	 * If there is already a log for that day, nothing will happen
 	 */
 	public void logDate() {
-		boolean noDupe = false;
-		for(LocalDate key: previousDailylogs.keySet()) {
-			if(key.isEqual(LocalDate.now())) {
-				noDupe = true;
-			}
+		String token = null;
+		for(String key: logCurrentDate.keySet()) {
+			token += key + ":" + logCurrentDate.get(key) + ",";
+			
 		}
-		if(noDupe) {
-		previousDailylogs.put(LocalDate.now(), currentDailyLog);
-		currentDailyLog = new DailyLog(calorieLimit);
-		}
+		logs.put(LocalDate.now(), token);
+		logCurrentDate.clear();
+		
 	}
-	
 	
 	
 	/**
 	 * Takes in date of format mm/dd/yyyy and retrieves the data from that day
 	 * @param date
-	 * @return the DailyLog of data from the specified date. 
+	 * @return the string of data from the specified date. The format will be 'type:value' in one string delimited by commas
 	 */
-	public DailyLog retrieveDate(String date) {
-		String[] token = date.split("/");
-		int[] numberToken = new int[3];
-		numberToken[0] = Integer.parseInt(token[0]);
-		numberToken[1] = Integer.parseInt(token[1]);
-		numberToken[2] = Integer.parseInt(token[2]);
+	public String retrieveDate(String date) {
+		int dates[] = new int[3];
+		String[] dateStrings = date.split("/");
+		dates[0] = Integer.parseInt(dateStrings[2]);
+		dates[1] = Integer.parseInt(dateStrings[0]);
+		dates[2] = Integer.parseInt(dateStrings[1]);
 		
-		for(LocalDate key: previousDailylogs.keySet()) {
-			if(key.isEqual(LocalDate.of(numberToken[2], numberToken[0], numberToken[1]))) {
-				return previousDailylogs.get(key);
-				
-			}
-		}
-		return null;
+		 return logs.get(LocalDate.of(dates[0], dates[1], dates[2]));
 		
 		
 	}
 	
+	/**
+	 * Logs data in form <type, value> in the current date hashMap
+	 * will format to 'type:value' when transitioned to the history logs
+	 * @param type
+	 * @param value
+	 */
+	public void log(String type, String value) {
+		logCurrentDate.put(type, value);
+		
+	}
 	
 	/**
-	 * Overloaded Version of retrieve date. Uses a LocalDate object as a parameter and compares it to the history
+	 * Changes data in the current date
+	 * @param type
+	 * @param newValue
+	 * @return validation that the data is changed
+	 */
+	public boolean changeCurrentDateData(String type, String newValue) {
+		return logCurrentDate.replace(type, logCurrentDate.get(type), newValue);
+		
+	}
+	
+	/**
+	 * Changes data in the logged data
 	 * @param date
-	 * @return the DailyLog object of the specified date
+	 * @param type
+	 * @param newValue
+	 * @return Validation of the changed data, true if change, false if not
 	 */
-	public DailyLog retrieveDate(LocalDate date) {
-	
-		for(LocalDate key: previousDailylogs.keySet()) {
-			if(key.isEqual(date)) {
-				return previousDailylogs.get(key);
+	public boolean changeLogData(LocalDate date, String type, String newValue) {
+		boolean foundToken = false;
+		for(LocalDate key: logs.keySet()) {
+			if(date.isEqual(key)) {
+				String[] data = logs.get(key).split(",");
+				String rebuiltString = "";
+				for(int i = 0; i < data.length; i++) {
+					String[] split = data[i].split(":");
+					if(split[0].equals(type)) {
+						split[1] = newValue;
+						foundToken = true;
+					}
+						rebuiltString += split[0]+":"+split[1]+",";
+						
+				}
+				logs.replace(key, rebuiltString);
+					
+				}
 				
 			}
+		return foundToken;
+			
 		}
+	
+	
+	/**
+	 * Gets a type of data and the value from a logged date 
+	 * @param date
+	 * @param type
+	 * @return The data as a String in format 'type:value'
+	 */
+	public String getLogData(LocalDate date, String type) {
+		for(LocalDate key: logs.keySet()) {
+			if(date.isEqual(key)) {
+				String[] data = logs.get(key).split(",");
+				for(int i = 0; i < data.length; i++) {
+					String token = data[i];
+					String[] split = data[i].split(":");
+					if(split[0].equals(type)) {
+						return token;
+					}
+						
+				}
+					
+				}
+				
+			}
 		return null;
 		
-		
-		
 	}
-	
-	
-	/**
-	 * Standard getter for the currentLog field
-	 * @return
-	 */
-	public DailyLog getCurrentDailyLog() {
-		return currentDailyLog;
-		
-	}
-	
-	
-	/**
-	 * Standard mutator for the calorieLimit field
-	 * @param calorieLimit
-	 */
-	public void setCalorieLimit(int calorieLimit) {
-		
-		this.calorieLimit = calorieLimit;
-	}
-	
-	
-	/**
-	 * Standard getter for the calorieLimit field
-	 * @return
-	 */
-	public int getCalorieLimit() {
-		
-		return this.calorieLimit;
-	}
-	
-	
-
-
-	
-	
 
 
 		

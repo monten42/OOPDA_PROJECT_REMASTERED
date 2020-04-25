@@ -1,11 +1,5 @@
 package v5;
 
-/**
- * Custom Exception
- * The exception is thrown when an instance of a file already exists when trying to make a new one. The exception is thrown 
- * @author team Cyan
- *
- */
 public class DuplicateFoundException extends Exception {
 	
 	public DuplicateFoundException(String message) {
