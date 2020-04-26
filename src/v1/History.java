@@ -2,6 +2,7 @@ package v1;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -58,8 +59,6 @@ public class History implements Serializable {
 		}
 	}
 	
-	
-	
 	/**
 	 * Takes in date of format mm/dd/yyyy and retrieves the data from that day
 	 * @param date
@@ -112,7 +111,13 @@ public class History implements Serializable {
 		return currentDailyLog;
 		
 	}
-	
+	/**
+	 * Standard seetter for the currentLof field
+	 * @return
+	 */
+	public void setCurrentDailyLog(DailyLog today) {
+		currentDailyLog = today;
+	}
 	
 	/**
 	 * Standard mutator for the calorieLimit field
@@ -132,9 +137,32 @@ public class History implements Serializable {
 		
 		return this.calorieLimit;
 	}
+	/**
+	 * 
+	 * @return
+	 */
+	public ArrayList<String> getKeySet() {
+		ArrayList<String> dates = new ArrayList<>();
+		for(LocalDate l : previousDailylogs.keySet()) {
+			dates.add(l.toString());
+		}
+		return dates;
+		
+	}
 	
 	
-
+	
+	
+	/**
+	 * Used solely for testing dailylog gui, delete when serilization is complete
+	 */
+	public void logDateTest() {
+		previousDailylogs.put(LocalDate.of(2020, 03, 21), currentDailyLog);
+	}
+	
+	public DailyLog retrieveDateTest(String date) {
+		return previousDailylogs.get(LocalDate.parse(date));
+	}
 
 	
 	

@@ -167,7 +167,7 @@ public class User implements Serializable{
 	 * Changes the calorieLimit for future DailyLogs
 	 * @param calorieLimit
 	 */
-	public void changeCalorieLimit(int calorieLimit) {
+	public void setCalorieLimit(int calorieLimit) {
 		this.history.setCalorieLimit(calorieLimit);
 		
 	}

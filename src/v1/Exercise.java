@@ -43,6 +43,13 @@ public abstract class Exercise  {
 	public String toString() {
 		return name;
 	}
+	
+	/**
+	 * This is purely for testing purposes delete when calories is implemented
+	 */
+	public int getCaloriesBurned() {
+		return 50;
+	}
 
 
 
