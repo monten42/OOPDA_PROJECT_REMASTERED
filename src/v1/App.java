@@ -23,7 +23,6 @@ public class App {
 	 */
 	public App(Stage stage) {
 		
-		Dashboard.show();
 		FileIO.fileIO();
 		//setupUser();
 		//userEnvironment();
