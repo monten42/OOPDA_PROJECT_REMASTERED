@@ -2,10 +2,13 @@ package v1;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
+import javafx.event.ActionEvent;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -16,6 +19,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -26,6 +30,7 @@ public class GUI extends Application{
 	private static Stage stage;
 	private static BorderPane mainPane;
 	private static Pane userPane, historyPane, dashboardPane, foodPane, exercisePane, loginPane, btnPane;
+	
 	
 	private static User currentUser;
 
@@ -51,8 +56,8 @@ public class GUI extends Application{
 		dashboardPane = makeDashboardPane();
 		foodPane = makeFoodPane();
 		exercisePane = makeExercisePane();
-		loginPane = makeLoginPane();
 		btnPane = makeButtonPane();
+		loginPane = makeLoginPane();	
 		mainPane = new BorderPane();
 		stage = new Stage();
 		
@@ -71,6 +76,10 @@ public class GUI extends Application{
 	}
 	
 	private static HBox makeLoginPane() {
+		
+		
+		btnPane.setVisible(false);
+	
 		HBox pane = new HBox();
 		pane.setStyle("-fx-background-color: #4ED6CB");
 		GridPane rightPane = new GridPane();
@@ -100,11 +109,18 @@ public class GUI extends Application{
 		Label lblWeight = new Label("Weight:");
 		Label lblCalorieLimit = new Label("Daily Calorie Limit:");	
 		
-		Button enterBtn = new Button("Add This Profile");
-		enterBtn.setOnAction(e -> enterBtnPressed());
 		
+		Button enterBtn = new Button("Add This Profile");
+		Button useUserBtn = new Button("Use User");
+	
+		
+		Label noUserLbl = new Label("No User Selected");
+		noUserLbl.setTextFill(Color.web("#ff0000"));
+		noUserLbl.setStyle("-fx-background-color: #ffa500");
+		noUserLbl.setVisible(false);
+	
 		leftPane.setPadding(new Insets(60, 20, 20, 60));
-		leftPane.getChildren().addAll(selectNow, userSelection);
+		leftPane.getChildren().addAll(selectNow, userSelection, useUserBtn, noUserLbl);
 		leftPane.setMinWidth(200);
 		leftPane.setSpacing(25);
 		
@@ -131,18 +147,49 @@ public class GUI extends Application{
 		rightPane.add(txtCalorieLimit, 2, 6);
 		rightPane.add(enterBtn, 1, 7, 3, 1);
 		
+		Label showLabel = new Label("One or some of the values entered are not valid.  Please try again.");
+		showLabel.setTextFill(Color.web("#ff0000"));
+		showLabel.setStyle("-fx-background-color: #ffa500");
+		showLabel.setVisible(false);
+		rightPane.add(showLabel, 0, 8, 3, 1);
+		
+		
+		useUserBtn.setOnAction((event) -> {
+			
+			if(userSelection.getValue() != null) {
+				noUserLbl.setVisible(false);
+				currentUser = FileIO.retrieveUser(userSelection.getValue());
+				mainPane.setCenter(dashboardPane);
+				btnPane.setVisible(true);
+				
+				
+			}
+			else {
+				noUserLbl.setVisible(true);
+			}
+
+		});
+		
+		enterBtn.setOnAction((event) -> {
+			
+			try {			
+				User user = new User(txtUserName.getText(), textName.getText(), txtGender.getText(), Integer.parseInt(txtAge.getText()), 
+						Integer.parseInt(txtHeight.getText()), Integer.parseInt(txtWeight.getText()), Integer.parseInt(txtCalorieLimit.getText()));				
+				showLabel.setVisible(false);
+				FileIO.writeUserInfo(user);
+			}
+			catch(NumberFormatException e) {
+				showLabel.setVisible(true);
+			}
+
+		});
+		
+		
 		pane.getChildren().addAll(leftPane, rightPane);
 
 		return pane;	
 	}
 	
-	private static void enterBtnPressed() {
-		/**
-		String username = txtUserName.get
-		User user = new User(String username, String name, String gender, int age, int height, int weight, int calorieLimit);
-		FileIO.writeUserInfo(user);
-		**/
-	}
 	
 	private static HBox makeButtonPane() {
 		HBox pane = new HBox();
