@@ -11,12 +11,8 @@ public abstract class Exercise  {
 	 * Just the name
 	 */
 	private String name;
-
-	/**
-	 * Constructor to initialize the name field;
-	 * @param name
-	 */
-	public Exercise(String name) {
+	private int caloriesBurned;
+	public Exercise(String name, int caloriesBurned) {
 		this.name = name;
 	}
 
@@ -33,6 +29,14 @@ public abstract class Exercise  {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public int getCaloriesBurned() {
+		return this.caloriesBurned;
+	}
+	
+	public void setCaloriesBurned(int newCaloriesBurned) {
+		this.caloriesBurned = newCaloriesBurned;
 	}
 	
 	//Eventually override this so that Rep or Aerobic exercises can display their types?
