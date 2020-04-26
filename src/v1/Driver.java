@@ -1,4 +1,4 @@
-package v5;
+package v1;
 
 import javafx.application.Application;
 import javafx.stage.Stage;

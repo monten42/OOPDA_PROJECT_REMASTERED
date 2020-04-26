@@ -1,4 +1,4 @@
-package v5;
+package v1;
 
 public class Exercise  {
 
@@ -24,6 +24,13 @@ public class Exercise  {
 	//Eventually override this so that Rep or Aerobic exercises can display their types?
 	public String toString() {
 		return name;
+	}
+	
+	/**
+	 * This is purely for testing purposes delete when calories is implemented
+	 */
+	public int getCaloriesBurned() {
+		return 50;
 	}
 
 

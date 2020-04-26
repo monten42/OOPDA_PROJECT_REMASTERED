@@ -1,4 +1,4 @@
-package v5;
+package v1;
 
 public class RepExercise extends Exercise {
 
