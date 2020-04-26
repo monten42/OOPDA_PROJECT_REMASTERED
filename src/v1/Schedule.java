@@ -4,6 +4,11 @@ import java.util.HashMap;
 import java.io.Serializable;
 import java.time.LocalTime;
 
+/**
+ * Keeps track of all scheduleable exercises for the user
+ * @author Cyan
+ *
+ */
 public class Schedule implements Serializable {
 	
 	/**
@@ -16,6 +21,11 @@ public class Schedule implements Serializable {
 		this.schedule = new HashMap<Exercise, LocalTime[]>();
 	}
 	
+	/**
+	 * Adds the exercise to the schedule if it does not conflict with any of the other times
+	 * @param newExercise
+	 * @param times
+	 */
 	public void addToSchedule(Exercise newExercise, LocalTime[] times) {
 		boolean fits = true;
 		for(Exercise key: schedule.keySet()) {
@@ -31,6 +41,10 @@ public class Schedule implements Serializable {
 		
 	}
 	
+	/**
+	 * removes an exercise with the specified name from the schedule
+	 * @param name
+	 */
 	public void removeFromSchedule(String name) {
 		Exercise ref = null;
 		for(Exercise key: schedule.keySet()) {
@@ -46,19 +60,32 @@ public class Schedule implements Serializable {
 		
 	}
 	
+	/**
+	 * Changes the times of a current exercise in the schedule
+	 * @param name
+	 * @param newTimes
+	 */
 	public void changeExerciseTime(String name, LocalTime[] newTimes) {
 		for(Exercise key: schedule.keySet()) {
 			if(key.getName().equals(name)) {
-				schedule.put(key, newTimes);
+				addToSchedule(key, newTimes);
 			}
 		}
 		
 	}
 	
+	/**
+	 * Standard setter for the schedule field
+	 * @param newSchedule
+	 */
 	public void setSchedule(HashMap<Exercise, LocalTime[]> newSchedule) {
 		this.schedule = newSchedule;
 	}
 	
+	/**
+	 * Standard getter for the schedule field
+	 * @return schedules
+	 */
 	public HashMap<Exercise, LocalTime[]> getSchedule(){
 		return this.schedule;
 	}
