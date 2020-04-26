@@ -1,10 +1,10 @@
 package v1;
 
-public class Exercise  {
+public abstract class Exercise  {
 
 	private String name;
-
-	public Exercise(String name) {
+	private int caloriesBurned;
+	public Exercise(String name, int caloriesBurned) {
 		this.name = name;
 	}
 
@@ -19,6 +19,14 @@ public class Exercise  {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public int getCaloriesBurned() {
+		return this.caloriesBurned;
+	}
+	
+	public void setCaloriesBurned(int newCaloriesBurned) {
+		this.caloriesBurned = newCaloriesBurned;
 	}
 	
 	//Eventually override this so that Rep or Aerobic exercises can display their types?
