@@ -1,7 +1,6 @@
 package v1;
 
 import java.io.Serializable;
-import java.time.LocalTime;
 
 public class User implements Serializable{
 	
@@ -10,7 +9,6 @@ public class User implements Serializable{
     private String name, gender, username;
     private int age, height, weight;
     private History history;
-    private Schedule schedule;
 
     
     /**
@@ -31,7 +29,6 @@ public class User implements Serializable{
         this.height = height;
         this.weight = weight;
         history = new History(calorieLimit);
-        schedule = new Schedule();
     }
 	
     /**
@@ -172,11 +169,6 @@ public class User implements Serializable{
 	 */
 	public void changeCalorieLimit(int calorieLimit) {
 		this.history.setCalorieLimit(calorieLimit);
-		
-	}
-	
-	public void addToSchedule(Exercise exercise, LocalTime[] times) {
-		schedule.addToSchedule(exercise, times);
 		
 	}
 

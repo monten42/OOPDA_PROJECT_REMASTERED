@@ -153,8 +153,8 @@ public class Dashboard {
 	 */
 	private static void setFood() {
 
-		ListView list = new ListView();
-		for()
+		Label lbl1 = new Label("Food page test!");
+		Label lbl2 = new Label("Wow!");
 		displayPane = new BorderPane();
 		((BorderPane) displayPane).setCenter(lbl1);
 		((BorderPane) displayPane).setTop(lbl2);

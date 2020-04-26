@@ -6,8 +6,8 @@ public class RepExercise extends Exercise {
 	private int intensity;
 
 
-	public RepExercise(String name, int reps, int intensity, int caloriesBurned) {
-		super(name, caloriesBurned);
+	public RepExercise(String name, int reps, int intensity) {
+		super(name);
 		this.reps = reps;
 		this.intensity = intensity;
 	}
@@ -29,8 +29,7 @@ public class RepExercise extends Exercise {
 	}
 	
 	public String toString() {
-		return(super.getName() + " Reps: "+ this.reps + ", intensity: " + this.intensity + ", Calories Burned: "
-				      + super.getCaloriesBurned());
+		return(super.getName() + " Reps: "+ this.reps + " intensity: " + this.intensity);
 		
 	}
 
