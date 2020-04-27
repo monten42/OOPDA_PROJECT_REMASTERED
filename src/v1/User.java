@@ -11,6 +11,8 @@ public class User implements Serializable{
     private int age, height, weight;
     private History history;
     private Schedule schedule;
+    private FoodList foodlist;
+    private ExerciseList exerciselist;
 
     
     /**
@@ -177,6 +179,22 @@ public class User implements Serializable{
 	
 	public void addToSchedule(Exercise exercise, LocalTime[] times) {
 		schedule.addToSchedule(exercise, times);
+		
+	}
+	
+	public FoodList getFoodList() {
+		return this.foodlist;
+	}
+	
+	public void setFoodList(FoodList newFoodList) {
+		
+	}
+		
+	public ExerciseList getExerciseList() {
+		return this.exerciselist;
+	}
+	
+	public void setExerciseList(ExerciseList newExerciseList) {
 		
 	}
 

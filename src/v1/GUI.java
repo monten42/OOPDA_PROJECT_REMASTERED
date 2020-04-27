@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -259,13 +260,20 @@ public class GUI extends Application{
 	}
 	
 	private static BorderPane makeFoodPane() {
-		BorderPane pane = new BorderPane();
-		pane.setStyle("-fx-background-color: #00FDFF");
-		Label lbl1 = new Label("Food page test!");
-		Label lbl2 = new Label("Wow!");	
-		pane.setCenter(lbl1);
-		pane.setTop(lbl2);
-		return pane;
+		ListView listview = new ListView();
+		if(currentUser != null) {
+		for(FoodItem food: currentUser.getFoodList().getFoods()) {
+			listview.getItems().add(food);
+		}
+		}
+		Button logFood = new Button("Log");
+		Button addFood = new Button("Add a Food");
+		TextField search = new TextField();
+		HBox buttons = new HBox(logFood, addFood);
+		VBox pane = new VBox(search, listview, buttons);
+		BorderPane panel = new BorderPane();
+		panel.setCenter(pane);
+		return panel;
 	}
 	
 	private static BorderPane makeExercisePane() {

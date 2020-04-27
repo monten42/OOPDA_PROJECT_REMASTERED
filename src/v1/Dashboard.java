@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -269,7 +270,7 @@ public class Dashboard {
 	private static void setFood() {
 
 		ListView list = new ListView();
-		for()
+		for(FoodItem food: currentUser.ge)
 		displayPane = new BorderPane();
 		((BorderPane) displayPane).setCenter(lbl1);
 		((BorderPane) displayPane).setTop(lbl2);
