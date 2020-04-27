@@ -1,6 +1,8 @@
 package v1;
 
-public class RepExercise extends Exercise {
+import java.io.Serializable;
+
+public class RepExercise extends Exercise implements Serializable {
 
 	private int reps;
 	private int intensity;
