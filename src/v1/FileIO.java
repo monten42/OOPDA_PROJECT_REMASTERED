@@ -99,6 +99,25 @@ public class FileIO {
 		}
 		
 	}
+	
+	public static FoodList deserializeFoodList() {
+		try
+		{
+		    FileInputStream fileStream = new FileInputStream("Admin//foodlist.ser");
+		    ObjectInputStream objectStream = new ObjectInputStream(fileStream);
+		    FoodList list = (FoodList) objectStream.readObject(); 
+		    objectStream.close();
+		    return list;  
+		    
+		}
+		catch (Exception e)
+		{
+		    System.out.println("Error when loading from file.");
+		    return null;
+		}
+	}
+	
+	
 	public static ArrayList<String> usernames(){
 		ArrayList<String> usernames = new ArrayList<>();
 		try {
