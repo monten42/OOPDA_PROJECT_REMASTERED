@@ -81,6 +81,9 @@ public class DailyLog implements Serializable{
 		this.caloriesConsumed = caloriesConsumed;
 	}
 	
+	public LocalDate getDate() {
+		return date;
+	}
 	
 	/**
 	 * Formats the calorie information in a proper way

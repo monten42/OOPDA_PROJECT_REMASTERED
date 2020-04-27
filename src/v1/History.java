@@ -43,19 +43,13 @@ public class History implements Serializable {
 	
 	
 	/**
-	 * Pushed the logged data from the current date to an archived, previous date format in the logs field
-	 * If there is already a log for that day, nothing will happen
+	 * If it is a new day the old daily log will get pushed to the HashMap and
+	 * the new daily log will be saved
 	 */
 	public void logDate() {
-		boolean noDupe = false;
-		for(LocalDate key: previousDailylogs.keySet()) {
-			if(key.isEqual(LocalDate.now())) {
-				noDupe = true;
-			}
-		}
-		if(noDupe) {
-		previousDailylogs.put(LocalDate.now(), currentDailyLog);
-		currentDailyLog = new DailyLog(calorieLimit);
+		if(!getCurrentDailyLog().getDate().equals(LocalDate.now())) {
+			previousDailylogs.put(getCurrentDailyLog().getDate(), currentDailyLog);
+			currentDailyLog = new DailyLog(calorieLimit);
 		}
 	}
 	
