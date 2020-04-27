@@ -1,6 +1,7 @@
 package v1;
+import java.io.Serializable;
 import java.time.LocalTime;
-public class AerobicExercise extends Exercise implements Scheduleable {
+public class AerobicExercise extends Exercise implements Scheduleable, Serializable{
 
 	private int[] duration;
 

@@ -1,11 +1,13 @@
 package v1;
 
+import java.io.Serializable;
+
 /**
  * The Exercise class is an abstract class to hold information about an exercise. More specific exercise subclasses will be maded and contain more specific information
  * @author Cyan
  *
  */
-public abstract class Exercise  {
+public abstract class Exercise implements Serializable {
 
 	/**
 	 * Just the name
@@ -15,7 +17,6 @@ public abstract class Exercise  {
 	public Exercise(String name, int caloriesBurned) {
 		this.name = name;
 	}
-
 	/**
 	 * Standard getter for the name field
 	 * @return the name
@@ -48,12 +49,6 @@ public abstract class Exercise  {
 		return name;
 	}
 	
-	/**
-	 * This is purely for testing purposes delete when calories is implemented
-	 */
-	public int getCaloriesBurned() {
-		return 50;
-	}
 
 
 
