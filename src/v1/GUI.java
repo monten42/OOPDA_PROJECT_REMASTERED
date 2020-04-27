@@ -154,7 +154,7 @@ public class GUI extends Application{
 
 			if(FileIO.usernames().contains(userSelection.getValue())) {
 				currentUser = FileIO.retrieveUser(userSelection.getValue());
-				currentUser.getHistory().logDate();
+				//currentUser.getHistory().logDate();
 				mainPane.setCenter(makeDashboardPane());
 				mainPane.setBottom(btnPane);
 
@@ -373,15 +373,34 @@ public class GUI extends Application{
 	}
 
 	private static BorderPane makeFoodPane() {
-		ListView listview = new ListView();
+		ListView<FoodItem> listview = new ListView<FoodItem>();
 		if(currentUser != null) {
 		for(FoodItem food: currentUser.getFoodList().getFoods()) {
 			listview.getItems().add(food);
 		}
 		}
 		Button logFood = new Button("Log");
+		
+		
+		logFood.setOnAction(e->{
+		currentUser.getHistory().getCurrentDailyLog().addFood(
+				listview.getSelectionModel().getSelectedItem());
+		});
+		
+		
 		Button addFood = new Button("Add a Food");
+		addFood.setOnAction(e->{} );
+		
+		
 		TextField search = new TextField();
+		
+		search.setOnKeyTyped(e ->{
+			
+		
+			
+				
+		});
+		
 		HBox buttons = new HBox(logFood, addFood);
 		VBox pane = new VBox(search, listview, buttons);
 		BorderPane panel = new BorderPane();
