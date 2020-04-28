@@ -88,3 +88,33 @@
   <message>plzwork successfully logged in</message>
 </record>
 </log>
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2020-04-28T19:19:17</date>
+  <millis>1588115957319</millis>
+  <sequence>0</sequence>
+  <logger>v1.GUI</logger>
+  <level>INFO</level>
+  <class>v1.FileIO</class>
+  <method>logLogin</method>
+  <thread>13</thread>
+  <message>plzwork successfully logged in</message>
+</record>
+</log>
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2020-04-28T19:26:03</date>
+  <millis>1588116363206</millis>
+  <sequence>0</sequence>
+  <logger>v1.GUI</logger>
+  <level>INFO</level>
+  <class>v1.FileIO</class>
+  <method>logLogin</method>
+  <thread>13</thread>
+  <message>fdssdfsdf successfully logged in</message>
+</record>
+</log>
