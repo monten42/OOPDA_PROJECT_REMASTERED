@@ -41,6 +41,10 @@ public class GUI extends Application{
 	private static Pane loginPane, btnPane;
 	
 	private static User currentUser;
+	
+	private static BackgroundImage myBI= new BackgroundImage(new Image("background2.png",32,32,false,true),
+	        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(830, 500, false, false, true, true)
+	          );
 
 	/**
 	 * Main method
@@ -81,7 +85,7 @@ public class GUI extends Application{
 	private static HBox makeLoginPane() {
 
 		HBox pane = new HBox();
-		pane.setStyle("-fx-background-color: #4ED6CB");
+		//pane.setStyle("-fx-background-color: #4ED6CB");
 		GridPane rightPane = new GridPane();
 		rightPane.setVisible(false);
 		VBox leftPane = new VBox();
@@ -202,10 +206,6 @@ public class GUI extends Application{
 
 		pane.getChildren().addAll(leftPane, rightPane);
 		
-		
-		BackgroundImage myBI= new BackgroundImage(new Image("background1.png",32,32,false,true),
-		        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(830, 500, false, false, true, true)
-		          );
 		//then you set to your node
 		pane.setBackground(new Background(myBI));
 
@@ -338,9 +338,7 @@ public class GUI extends Application{
 		allSettings.getChildren().addAll(options, textboxes, buttons, wrongInput);
 		
 		
-		BackgroundImage myBI= new BackgroundImage(new Image("background2.png",32,32,false,true),
-		        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(830, 500, false, false, true, true)
-		          );
+		
 		//then you set to your node
 		allSettings.setBackground(new Background(myBI));
 		
@@ -411,9 +409,11 @@ public class GUI extends Application{
 
 	private static BorderPane makeDashboardPane() {
 		BorderPane pane = new BorderPane();
-		pane.setStyle("-fx-background-color: #4ED6CB");
+		//pane.setStyle("-fx-background-color: #4ED6CB");
 		Label lbl = new Label("Dashboard page test!");
 		pane.setCenter(lbl);
+		//then you set to your node
+		pane.setBackground(new Background(myBI));
 		return pane;
 	}
 
@@ -449,16 +449,21 @@ public class GUI extends Application{
 		BorderPane panel = new BorderPane();
 		panel.setCenter(pane);
 		
+		//then you set to your node
+		panel.setBackground(new Background(myBI));
+		
 		return panel;
 	}
 
 	private static BorderPane makeExercisePane() {
 		BorderPane pane = new BorderPane();
-		pane.setStyle("-fx-background-color: #35E0FF");
+		//pane.setStyle("-fx-background-color: #35E0FF");
 		Label lbl1 = new Label("Exercises page test!");
 		Label lbl2 = new Label("Wow!");	
 		pane.setCenter(lbl1);
 		pane.setTop(lbl2);
+		//then you set to your node
+		pane.setBackground(new Background(myBI));
 		return pane;
 	}
 
