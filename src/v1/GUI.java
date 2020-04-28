@@ -3,6 +3,8 @@ package v1;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
 import javafx.application.Application;
@@ -31,8 +33,7 @@ public class GUI extends Application{
 	private static Stage stage;
 	private static BorderPane mainPane;
 	private static Pane loginPane, btnPane;
-
-
+	
 	private static User currentUser;
 
 	/**
@@ -157,8 +158,7 @@ public class GUI extends Application{
 				currentUser.getHistory().logDate();
 				mainPane.setCenter(makeDashboardPane());
 				mainPane.setBottom(btnPane);
-
-
+				FileIO.logLogin(currentUser.getUsername());
 			}
 			else {
 				userNotFound.setVisible(true);
