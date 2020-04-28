@@ -1,6 +1,7 @@
 package v1;
+import java.io.Serializable;
 import java.time.LocalTime;
-public class AerobicExercise extends Exercise implements Scheduleable {
+public class AerobicExercise extends Exercise implements Scheduleable, Serializable{
 
 	private int[] duration;
 
@@ -9,8 +10,8 @@ public class AerobicExercise extends Exercise implements Scheduleable {
 	 * @param name
 	 * @param duration, formatted in 'hh:mm'
 	 */
-	public AerobicExercise(String name, String duration)  {
-		super(name);
+	public AerobicExercise(String name, String duration, int caloriesBurned)  {
+		super(name, caloriesBurned);
 		this.duration = new int[2];
 		String[] times = duration.split(":");
 		this.duration[0] = Integer.parseInt(times[0]);
@@ -58,7 +59,8 @@ public class AerobicExercise extends Exercise implements Scheduleable {
 	 * @return small, detailed string of the class. Includes name and duration
 	 */
 	public String toString() {
-		return (super.getName() + ", Duration- " + this.duration[0] + ":" + this.duration[1]);
+		return (super.getName() + ", Duration- " + this.duration[0] + ":" + this.duration[1] + ", Calories Burned: "
+				+ super.getCaloriesBurned());
 	}
 
 }

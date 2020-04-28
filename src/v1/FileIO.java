@@ -29,22 +29,7 @@ public class FileIO {
 			e.printStackTrace();
 		}
 	}
-	/**
-	public static void createNewUser(String username) {
-		String path = "Admin\\"+username;
-		new File(path).mkdir();
-		new File(path+"\\Food").mkdir();
-		new File(path+"\\Exercise").mkdir();
-		try {
-			new File(path+"\\Details.txt").createNewFile();
-			new File(path+"\\PersonalFoods.txt").createNewFile();
-			new File(path+"\\PersonalExercise.txt").createNewFile();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	**/
+
 	public void newMonth(String username, int month) throws IOException{
 		String path = "Admin\\"+username;
 		String months = "month"+month+".txt";
@@ -95,20 +80,6 @@ public class FileIO {
 		    System.out.println("Error when saving to file.");
 		}
 		
-		
-		/**
-		try {
-			Writer writer = new FileWriter("Admin\\"+username + "\\Details.txt");
-			Writer usernameWriter = new FileWriter("Admin\\Usernames.txt", APPEND_MODE);
-			writer.write(user.printInfo());
-			usernameWriter.write(username + "\n");
-			writer.close();
-			usernameWriter.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		**/
 	}
 	
 	public static User retrieveUser(String username) {
@@ -118,8 +89,7 @@ public class FileIO {
 		    ObjectInputStream objectStream = new ObjectInputStream(fileStream);
 		    User user = (User) objectStream.readObject(); 
 		    objectStream.close();
-		    return user;
-		   
+		    return user;  
 		    
 		}
 		catch (Exception e)
@@ -128,27 +98,26 @@ public class FileIO {
 		    return null;
 		}
 		
-		
-		
-		/**
-		String path = "Admin\\"+username+"\\Details.txt";
-		String[] details = new String[6];
-		int counter = 0;
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(path));
-			String detail;
-			while((detail = br.readLine()) != null) {
-				details[counter] = detail.split(":")[1].trim();
-				counter++;
-			}
-			br.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return new User(username, details[0], details[1], Integer.parseInt(details[2]), Integer.parseInt(details[3]), Integer.parseInt(details[4]), Integer.parseInt(details[5]));
-	**/
 	}
+	
+	public static FoodList deserializeFoodList() {
+		try
+		{
+		    FileInputStream fileStream = new FileInputStream("Admin//foodlist.ser");
+		    ObjectInputStream objectStream = new ObjectInputStream(fileStream);
+		    FoodList list = (FoodList) objectStream.readObject(); 
+		    objectStream.close();
+		    return list;  
+		    
+		}
+		catch (Exception e)
+		{
+		    System.out.println("Error when loading from file.");
+		    return null;
+		}
+	}
+	
+	
 	public static ArrayList<String> usernames(){
 		ArrayList<String> usernames = new ArrayList<>();
 		try {
@@ -204,7 +173,7 @@ public class FileIO {
 	public static void addFood(FoodItem food) {
 		try {
 			Writer writer = new FileWriter("Admin\\Food Catalog.txt", APPEND_MODE);
-			writer.write(food.getString() + "\n");
+			writer.write(food.toString() + "\n");
 			writer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -214,7 +183,7 @@ public class FileIO {
 	public static void addPersonalFood(FoodItem food, String username) {
 		try {
 			Writer writer = new FileWriter("Admin\\"+username + "\\PersonalFoods.txt", APPEND_MODE);
-			writer.write(food.getString() + "\n");
+			writer.write(food.toString() + "\n");
 			writer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -259,20 +228,11 @@ public class FileIO {
 		}
 		return exercises;
 	}
-	public static void addExercise(Exercise exercise) {
-		try {
-			Writer writer = new FileWriter("Admin\\Exercise Catalog.txt", APPEND_MODE);
-			writer.write(exercise.getString() + "\n");
-			writer.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+
 	public static void addPersonalExercise(Exercise exercise, String username) {
 		try {
 			Writer writer = new FileWriter("Admin\\"+username + "\\PersonalExercises.txt", APPEND_MODE);
-			writer.write(exercise.getString() + "\n");
+			writer.write(exercise.toString() + "\n");
 			writer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

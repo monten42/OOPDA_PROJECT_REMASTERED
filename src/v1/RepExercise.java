@@ -1,13 +1,15 @@
 package v1;
 
-public class RepExercise extends Exercise {
+import java.io.Serializable;
+
+public class RepExercise extends Exercise implements Serializable {
 
 	private int reps;
 	private int intensity;
 
 
-	public RepExercise(String name, int reps, int intensity) {
-		super(name);
+	public RepExercise(String name, int reps, int intensity, int caloriesBurned) {
+		super(name, caloriesBurned);
 		this.reps = reps;
 		this.intensity = intensity;
 	}
@@ -29,7 +31,8 @@ public class RepExercise extends Exercise {
 	}
 	
 	public String toString() {
-		return(super.getName() + " Reps: "+ this.reps + " intensity: " + this.intensity);
+		return(super.getName() + " Reps: "+ this.reps + ", intensity: " + this.intensity + ", Calories Burned: "
+				      + super.getCaloriesBurned());
 		
 	}
 
