@@ -154,7 +154,7 @@ public class GUI extends Application{
 
 			if(FileIO.usernames().contains(userSelection.getValue())) {
 				currentUser = FileIO.retrieveUser(userSelection.getValue());
-				//currentUser.getHistory().logDate();
+				currentUser.getHistory().logDate();
 				mainPane.setCenter(makeDashboardPane());
 				mainPane.setBottom(btnPane);
 
@@ -274,6 +274,7 @@ public class GUI extends Application{
 		wrongInput.setPrefWidth(100);
 		wrongInput.setWrapText(true);
 		
+		
 		setName.setOnAction(e -> currentUser.setName(changeName.getText()));
 		setGender.setOnAction(e -> currentUser.setGender(changeGender.getText()));
 		setAge.setOnAction(e -> {if(checkSettingInput(e, changeAge)) {
@@ -308,12 +309,20 @@ public class GUI extends Application{
 									wrongInput.setText("The calorie limit value entered is not a number");
 								}
 							});
-		options.getChildren().addAll(name, gender, age, height, weight, calorieLimit);
+							
+							
+							options.getChildren().addAll(name, gender, age, height, weight, calorieLimit);
 		textboxes.getChildren().addAll(changeName, changeGender, changeAge, changeHeight, changeWeight, changeCalorieLimit);
 		buttons.getChildren().addAll(setName, setGender, setAge, setHeight, setWeight, setCalorieLimit);
 		allSettings.getChildren().addAll(options, textboxes, buttons, wrongInput);
+		
+		
+		
+		
 		return allSettings;
 	}
+	
+	
 	
 	/**
 	 * Checks if a string value is parsable to an int value
@@ -339,6 +348,7 @@ public class GUI extends Application{
 		HBox lists = new HBox(50);
 		VBox info = new VBox(30);
 		
+		
 		ComboBox<String> history = new ComboBox<String>();
 		history.getItems().addAll(currentUser.getHistory().getKeySet());
 		history.setEditable(true);
@@ -347,6 +357,7 @@ public class GUI extends Application{
 		Label foods = new Label("Foods");
 		Label exercises = new Label("Exercises");
 
+		
 		lists.setAlignment(Pos.CENTER);
 		choices.setAlignment(Pos.CENTER);
 		calorieInfo.setAlignment(Pos.CENTER);
@@ -360,6 +371,7 @@ public class GUI extends Application{
 							foods.setText(currentUser.getHistory().retrieveDateTest(history.getValue()).foodInfo());
 							exercises.setText(currentUser.getHistory().retrieveDateTest(history.getValue()).exerciseInfo());
 							});
+	
 
 		return info;	
 	}
@@ -375,9 +387,9 @@ public class GUI extends Application{
 	private static BorderPane makeFoodPane() {
 		ListView<FoodItem> listview = new ListView<FoodItem>();
 		if(currentUser != null) {
-		for(FoodItem food: currentUser.getFoodList().getFoods()) {
-			listview.getItems().add(food);
-		}
+			for(FoodItem food: currentUser.getFoodList().getFoods()) {
+				listview.getItems().add(food);
+			}
 		}
 		Button logFood = new Button("Log");
 		
@@ -395,8 +407,6 @@ public class GUI extends Application{
 		TextField search = new TextField();
 		
 		search.setOnKeyTyped(e ->{
-			
-		
 			
 				
 		});

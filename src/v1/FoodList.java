@@ -83,6 +83,7 @@ public class FoodList implements Serializable{
 	 * @return The desired FoodItem
 	 */
 	public FoodItem getFood(String name) {
+		
 		for(FoodItem food: foods) {
 			if(food.getName().equals(name)) {
 				return food;

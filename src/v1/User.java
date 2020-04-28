@@ -34,8 +34,9 @@ public class User implements Serializable{
         this.weight = weight;
         history = new History(calorieLimit);
         schedule = new Schedule();
+        foodlist = FileIO.deserializeFoodList();	
+        
     }
-	
     /**
      * Constructs a user object Initializes all fields with preset age, height, and weight.
      */

@@ -46,11 +46,11 @@ public class BackendTestDriver {
 		el.addRepExercise("Lifting Weights", 10, 10, 600);
 		el.addRepExercise("HIIT", 5, 7, 400);
 		try {
-			FileOutputStream filee = new FileOutputStream("exerciselist.txt");
+			FileOutputStream filee = new FileOutputStream("Admin\\exerciselist.ser");
 			ObjectOutputStream outt = new ObjectOutputStream(filee);
 			outt.writeObject(el);
 			outt.close();
-			FileOutputStream file = new FileOutputStream("foodlist.txt");
+			FileOutputStream file = new FileOutputStream("Admin\\foodlist.ser");
 			ObjectOutputStream out = new ObjectOutputStream(file);
 			out.writeObject(fl);
 			out.close();
@@ -60,8 +60,14 @@ public class BackendTestDriver {
 		}
 		
 		
+		User user = FileIO.retrieveUser("frogkm");
+		//System.out.println(user.getFoodList().getFood("Bagel"));
+		FoodList list =FileIO.deserializeFoodList();
+		System.out.println(list.getFood("Bagel"));
 		
 
 	}
 
+	
+	
 }
