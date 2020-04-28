@@ -17,6 +17,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -35,6 +41,10 @@ public class GUI extends Application{
 	private static Pane loginPane, btnPane;
 	
 	private static User currentUser;
+	
+	private static BackgroundImage myBI= new BackgroundImage(new Image("background2.png",32,32,false,true),
+	        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(830, 500, false, false, true, true)
+	          );
 
 	/**
 	 * Main method
@@ -75,7 +85,7 @@ public class GUI extends Application{
 	private static HBox makeLoginPane() {
 
 		HBox pane = new HBox();
-		pane.setStyle("-fx-background-color: #4ED6CB");
+		//pane.setStyle("-fx-background-color: #4ED6CB");
 		GridPane rightPane = new GridPane();
 		rightPane.setVisible(false);
 		VBox leftPane = new VBox();
@@ -154,7 +164,7 @@ public class GUI extends Application{
 		useUserBtn.setOnAction((event) -> {
 
 			if(FileIO.usernames().contains(userSelection.getValue())) {
-				currentUser = FileIO.retrieveUser(userSelection.getValue());
+				currentUser = (User)FileIO.deserialize("Admin//Users//" + userSelection.getValue() + ".ser");
 				currentUser.getHistory().logDate();
 				mainPane.setCenter(makeDashboardPane());
 				mainPane.setBottom(btnPane);
@@ -195,6 +205,9 @@ public class GUI extends Application{
 
 
 		pane.getChildren().addAll(leftPane, rightPane);
+		
+		//then you set to your node
+		pane.setBackground(new Background(myBI));
 
 		return pane;	
 	}
@@ -232,7 +245,9 @@ public class GUI extends Application{
 		VBox textboxes = new VBox(30);
 		VBox buttons = new VBox(30);
 		
-		allSettings.setStyle("-fx-background-color: #25BDB1");
+		
+		
+		//allSettings.setStyle("-fx-background-color: #25BDB1");
 		
 		allSettings.setAlignment(Pos.CENTER);
 		options.setAlignment(Pos.CENTER);
@@ -274,9 +289,15 @@ public class GUI extends Application{
 		wrongInput.setPrefWidth(100);
 		wrongInput.setWrapText(true);
 		
+			setName.setOnAction(e -> {currentUser.setName(changeName.getText());
+			name.setText("Name: " + currentUser.getName());
+		});
 		
-		setName.setOnAction(e -> currentUser.setName(changeName.getText()));
-		setGender.setOnAction(e -> currentUser.setGender(changeGender.getText()));
+			setGender.setOnAction(e -> {currentUser.setGender(changeGender.getText());
+			gender.setText("Gender: " + currentUser.getGender());			
+		});
+		
+		
 		setAge.setOnAction(e -> {if(checkSettingInput(e, changeAge)) {
 									currentUser.setAge(Integer.parseInt(changeAge.getText()));
 									age.setText("Age: " + currentUser.getAge());
@@ -317,6 +338,9 @@ public class GUI extends Application{
 		allSettings.getChildren().addAll(options, textboxes, buttons, wrongInput);
 		
 		
+		
+		//then you set to your node
+		allSettings.setBackground(new Background(myBI));
 		
 		
 		return allSettings;
@@ -371,6 +395,13 @@ public class GUI extends Application{
 							foods.setText(currentUser.getHistory().retrieveDateTest(history.getValue()).foodInfo());
 							exercises.setText(currentUser.getHistory().retrieveDateTest(history.getValue()).exerciseInfo());
 							});
+		
+		
+		BackgroundImage myBI= new BackgroundImage(new Image("background2.png",32,32,false,true),
+		        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(830, 500, false, false, true, true)
+		          );
+		//then you set to your node
+		info.setBackground(new Background(myBI));
 	
 
 		return info;	
@@ -378,9 +409,11 @@ public class GUI extends Application{
 
 	private static BorderPane makeDashboardPane() {
 		BorderPane pane = new BorderPane();
-		pane.setStyle("-fx-background-color: #4ED6CB");
+		//pane.setStyle("-fx-background-color: #4ED6CB");
 		Label lbl = new Label("Dashboard page test!");
 		pane.setCenter(lbl);
+		//then you set to your node
+		pane.setBackground(new Background(myBI));
 		return pane;
 	}
 
@@ -415,16 +448,22 @@ public class GUI extends Application{
 		VBox pane = new VBox(search, listview, buttons);
 		BorderPane panel = new BorderPane();
 		panel.setCenter(pane);
+		
+		//then you set to your node
+		panel.setBackground(new Background(myBI));
+		
 		return panel;
 	}
 
 	private static BorderPane makeExercisePane() {
 		BorderPane pane = new BorderPane();
-		pane.setStyle("-fx-background-color: #35E0FF");
+		//pane.setStyle("-fx-background-color: #35E0FF");
 		Label lbl1 = new Label("Exercises page test!");
 		Label lbl2 = new Label("Wow!");	
 		pane.setCenter(lbl1);
 		pane.setTop(lbl2);
+		//then you set to your node
+		pane.setBackground(new Background(myBI));
 		return pane;
 	}
 
