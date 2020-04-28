@@ -247,11 +247,11 @@ public class BackendTestDriver {
 		el.addRepExercise("Lifting Weights", 10, 10, 600);
 		el.addRepExercise("HIIT", 5, 7, 400);
 		try {
-			FileOutputStream filee = new FileOutputStream("exerciselist.txt");
+			FileOutputStream filee = new FileOutputStream("exerciselist.ser");
 			ObjectOutputStream outt = new ObjectOutputStream(filee);
 			outt.writeObject(el);
 			outt.close();
-			FileOutputStream file = new FileOutputStream("foodlist.txt");
+			FileOutputStream file = new FileOutputStream("foodlist.ser");
 			ObjectOutputStream out = new ObjectOutputStream(file);
 			out.writeObject(fl);
 			out.close();
