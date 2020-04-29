@@ -108,5 +108,34 @@ public class FileIO {
 		}
 		LOGGER.log(Level.INFO, username + " successfully logged in");
 	}
+	
+	
+	/**
+	 * User for reserializing exerciselist/foodlist run
+	 * backendtest to update the lists
+	 * delete when serialized lists are complete
+	 */
+	public static void serializeLists(ExerciseList e) {
+		try {
+			FileOutputStream file = new FileOutputStream("Admin\\exerciselist.ser");
+			ObjectOutputStream out = new ObjectOutputStream(file);
+			out.writeObject(e);
+			out.close();
+		} catch (IOException ex) {
+			// TODO Auto-generated catch block
+			ex.printStackTrace();
+		}
+	}
+	public static void serializeLists(FoodList f) {
+		try {
+			FileOutputStream file = new FileOutputStream("Admin\\foodlist.ser");
+			ObjectOutputStream out = new ObjectOutputStream(file);
+			out.writeObject(f);
+			out.close();
+		} catch (IOException ex) {
+			// TODO Auto-generated catch block
+			ex.printStackTrace();
+		}
+	}
 
 }

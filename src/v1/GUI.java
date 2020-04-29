@@ -10,10 +10,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -27,22 +30,29 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class GUI extends Application{
 
 	private static final int sW = 830;
 	private static final int sH = 500;
+	private static double xSpot = 0.0;
+	private static double ySpot = 0.0;
 	private static Stage stage;
 	private static BorderPane mainPane;
 	private static Pane loginPane, btnPane;
+	private static Label currentTab;
 	
 	private static User currentUser;
 	
@@ -66,24 +76,36 @@ public class GUI extends Application{
 		stage.showAndWait();
 		
 	}
-	
-	@Override
-	public void stop() {
-		FileIO.writeUserInfo(currentUser);
-        Platform.exit();
-        System.exit(0);
-	}
 
 	private static void setupGUI() {
 		btnPane = makeButtonPane();
 		loginPane = makeLoginPane();	
 		mainPane = new BorderPane();
 		stage = new Stage();
+		currentTab = new Label("LOGIN");
+		currentTab.setStyle("-fx-font-size: 20px;"
+						  + "-fx-font-weight: bold;");
 
 		mainPane.setCenter(loginPane);
-		
+		mainPane.setTop(topPane());
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setTitle("Cyan is god");
+		stage.initStyle(StageStyle.UNDECORATED);
+		mainPane.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                xSpot = event.getSceneX();
+                ySpot = event.getSceneY();
+            }
+        });
+
+        mainPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                stage.setX(event.getScreenX() - xSpot);
+                stage.setY(event.getScreenY() - ySpot);
+            }
+        });
 		stage.setHeight(sW);
 		stage.setHeight(sH);
 		stage.setMaxWidth(sW);
@@ -92,6 +114,7 @@ public class GUI extends Application{
 		stage.setMinHeight(sH);
 		stage.setResizable(false);
 		stage.setScene(new Scene(mainPane));
+		
 	}
 
 	private static HBox makeLoginPane() {
@@ -179,6 +202,7 @@ public class GUI extends Application{
 				currentUser = (User)FileIO.deserialize("Admin//Users//" + userSelection.getValue() + ".ser");
 				currentUser.getHistory().logDate();
 				mainPane.setCenter(makeDashboardPane());
+				currentTab.setText("DASHBOARD");
 				mainPane.setBottom(btnPane);
 				FileIO.logLogin(currentUser.getUsername());
 			}
@@ -229,24 +253,6 @@ public class GUI extends Application{
 		HBox pane = new HBox();
 		pane.setStyle("-fx-border-color: black");
 		Button historyBtn = new Button("History");
-		
-		/**
-		historyBtn.addEventHandler(MouseEvent.MOUSE_ENTERED,
-		        new EventHandler<MouseEvent>() {
-		          @Override
-		          public void handle(MouseEvent e) {
-		            historyBtn.setEffect(new Shadow(5, Color.BLUE));
-		          }
-		        });
-		historyBtn.addEventHandler(MouseEvent.MOUSE_EXITED,
-		        new EventHandler<MouseEvent>() {
-		          @Override
-		          public void handle(MouseEvent e) {
-		        	  historyBtn.setEffect(null);
-		          }
-		        });
-		**/
-
 		Button userBtn = new Button("User");
 		Button dashboardBtn = new Button("Dashboard");	
 		Button foodBtn = new Button("Food");
@@ -254,6 +260,7 @@ public class GUI extends Application{
 		historyBtn.setOnAction(e -> {
 			
 			mainPane.setCenter(makeHistoryPane());
+			currentTab.setText("HISTORY");
 			historyBtn.setDisable(true);
 			userBtn.setDisable(false);
 			dashboardBtn.setDisable(false);
@@ -263,6 +270,7 @@ public class GUI extends Application{
 		userBtn.setOnAction(e -> {
 			
 			mainPane.setCenter(makeUserPane());
+			currentTab.setText("USER SETTINGS");
 			historyBtn.setDisable(false);
 			userBtn.setDisable(true);
 			dashboardBtn.setDisable(false);
@@ -272,6 +280,7 @@ public class GUI extends Application{
 		dashboardBtn.setOnAction(e -> {
 			
 			mainPane.setCenter(makeDashboardPane());
+			currentTab.setText("DASHBOARD");
 			historyBtn.setDisable(false);
 			userBtn.setDisable(false);
 			dashboardBtn.setDisable(true);
@@ -279,6 +288,7 @@ public class GUI extends Application{
 			exerciseBtn.setDisable(false);
 		});
 			foodBtn.setOnAction(e -> {mainPane.setCenter(makeFoodPane());
+			currentTab.setText("FOOD");
 			historyBtn.setDisable(false);
 			userBtn.setDisable(false);
 			dashboardBtn.setDisable(false);
@@ -286,6 +296,7 @@ public class GUI extends Application{
 			exerciseBtn.setDisable(false);
 		});
 			exerciseBtn.setOnAction(e -> {mainPane.setCenter(makeExercisePane());
+			currentTab.setText("EXERCISE");
 			historyBtn.setDisable(false);
 			userBtn.setDisable(false);
 			dashboardBtn.setDisable(false);
@@ -297,12 +308,26 @@ public class GUI extends Application{
 			btn.setMinHeight(sH / 6);
 			btn.setMinWidth(sW / buttons.size());
 			btn.setStyle("-fx-background-insets: 0, 0, 1, 2");
-		
 		}
 		pane.getChildren().addAll(buttons);
 		return pane;
 	}
 	
+	private static HBox topPane(){
+		HBox top = new HBox(300);
+		top.setAlignment(Pos.TOP_RIGHT);
+		Button close = new Button("Close");
+		close.setStyle("-fx-font-size: 20px");
+		close.setAlignment(Pos.TOP_RIGHT);
+		close.setOnAction(e -> {FileIO.writeUserInfo(currentUser);
+								Platform.exit();
+								System.exit(0);
+		currentTab.setAlignment(Pos.TOP_CENTER);
+		});
+		top.setBackground(new Background(myBI));
+		top.getChildren().addAll(currentTab, close);
+		return top;
+	}
 	/**
 	 * Allows the user to view and edit all of their personal information
 	 * @return an HBox with all of the information and fields necessary to change the information
@@ -444,10 +469,13 @@ public class GUI extends Application{
 		ComboBox<String> history = new ComboBox<String>();
 		history.getItems().addAll(currentUser.getHistory().getKeySet());
 		history.setEditable(true);
-		Button b = new Button("Press");
+		history.setPromptText("Enter date here");
+		Button b = new Button("Enter");
 		Label calorieInfo = new Label("Calories");
 		Label foods = new Label("Foods");
 		Label exercises = new Label("Exercises");
+		Label dateInputError = new Label("The inputted value for date is not a valid date");
+		dateInputError.setVisible(false);
 
 		
 		lists.setAlignment(Pos.CENTER);
@@ -457,30 +485,60 @@ public class GUI extends Application{
 		
 		lists.getChildren().addAll(foods, exercises);
 		choices.getChildren().addAll(history, b);
-		info.getChildren().addAll(choices, calorieInfo, lists);
+		info.getChildren().addAll(choices, dateInputError, calorieInfo, lists);
 		
-		b.setOnAction(e -> {calorieInfo.setText(currentUser.getHistory().retrieveDateTest(history.getValue()).basicInfo());
-							foods.setText(currentUser.getHistory().retrieveDateTest(history.getValue()).foodInfo());
-							exercises.setText(currentUser.getHistory().retrieveDateTest(history.getValue()).exerciseInfo());
+		b.setOnAction(e -> {if(currentUser.getHistory().containsLog(history.getValue())) {
+								calorieInfo.setText(currentUser.getHistory().retrieveLog(history.getValue()).basicInfo());
+								foods.setText(currentUser.getHistory().retrieveLog(history.getValue()).foodInfo());
+								exercises.setText(currentUser.getHistory().retrieveLog(history.getValue()).exerciseInfo());
+								dateInputError.setVisible(false);
+							}
+							else if(!currentUser.getHistory().validDateChecker(history.getValue())){
+								dateInputError.setText("The inputted value for the date is not a valid date");
+								dateInputError.setVisible(true);
+							}
+							else {
+								dateInputError.setText("The inputted value for the date has no log");
+								dateInputError.setVisible(true);
+							}
 							});
 		
-		
-		BackgroundImage myBI= new BackgroundImage(new Image("background2.png",32,32,false,true),
-		        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(830, 500, false, false, true, true)
-		          );
-		//then you set to your node
 		info.setBackground(new Background(myBI));
 	
 
 		return info;	
 	}
 
-	private static BorderPane makeDashboardPane() {
-		BorderPane pane = new BorderPane();
+	private static VBox makeDashboardPane() {
+		VBox pane = new VBox();
 
-		Label lbl = new Label("Dashboard page test!");
-		pane.setCenter(lbl);
-		//then you set to your node
+		Label nameLbl = new Label(currentUser.getName() + "'s Dashboard");
+		Label timeLbl = new Label("Today is " + currentUser.getHistory().getCurrentDailyLog().getDate().toString());
+		Label calLbl = new Label(currentUser.getHistory().getCurrentDailyLog().getcaloriesConsumed() + "/" + currentUser.getHistory().getCalorieLimit() + " Calories consumed");
+		Label calBurnLbl = new Label(currentUser.getHistory().getCurrentDailyLog().getExercises().size() +
+				" Exercises completed, " + currentUser.getHistory().getCurrentDailyLog().getCaloriesBurned() + " Calories burned");
+		pane.setAlignment(Pos.TOP_CENTER);
+		nameLbl.setFont(Font.font("Verdana", FontWeight.BOLD, 25));
+		nameLbl.setTextFill(Color.BLACK);
+		nameLbl.setPadding(new Insets(30, 0, 0, 0));
+		nameLbl.setAlignment(Pos.TOP_CENTER);
+		//nameLbl.setStyle("-fx-font: 24 arial;");
+		calLbl.setFont(Font.font("arial", 17));
+		timeLbl.setFont(Font.font("arial", FontWeight.EXTRA_BOLD, 17));
+		calBurnLbl.setFont(Font.font("arial", 17));
+		pane.setSpacing(20);
+		pane.getChildren().addAll(nameLbl, timeLbl, calLbl, calBurnLbl);
+		
+		ArrayList<PieChart.Data> foodList = new ArrayList<PieChart.Data>();
+		for(FoodItem food : currentUser.getHistory().getCurrentDailyLog().getFoodsEaten()) {
+			foodList.add(new PieChart.Data(food.getName(), food.getCalories()));
+		}
+	
+		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(foodList);         
+		PieChart foodChart = new PieChart(pieChartData);
+        foodChart.setTitle("Calorie Breakdown");
+        pane.getChildren().add(foodChart);
+		
 		pane.setBackground(new Background(myBI));
 		return pane;
 	}

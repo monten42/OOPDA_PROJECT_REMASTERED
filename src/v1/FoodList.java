@@ -11,6 +11,10 @@ import java.util.ArrayList;
 public class FoodList implements Serializable{
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1882253241654639752L;
+	/**
 	 * stores the FoodItems
 	 */
 	private ArrayList<FoodItem> foods;
