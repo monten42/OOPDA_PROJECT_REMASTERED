@@ -3,6 +3,7 @@ package v1;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.function.Consumer;
@@ -12,6 +13,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -508,20 +510,25 @@ public class GUI extends Application{
 	
 	
 	/**
-	 * Checks if a string value is parsable to an int value
-	 * @param e action event of a button
-	 * @param text the text being checked to see if it is parsable to int
-	 * @return true if the string is parsable to int
-	 */
-	private static boolean checkSettingInput(ActionEvent e, TextField text) {
-		try {
-			Integer.parseInt(text.getText());
-		}
-		catch (NumberFormatException nfe){
-			return false;
-		}
-		return true;
-	}
+     * Checks if a string value is parsable to an int value
+     * @param e action event of a button
+     * @param text the text being checked to see if it is parsable to int
+     * @return true if the string is parsable to int
+     */
+    private static boolean checkSettingInput(ActionEvent e, TextField text) {
+        try {
+            Integer.parseInt(text.getText());
+        }
+        catch (NumberFormatException nfe){
+            return false;
+        }
+        if(Integer.parseInt(text.getText()) <= 0) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
 	/**
 	 * Allows the user to check their daily logs from the past
 	 * @return a VBox with all the elements to display the history
@@ -789,14 +796,19 @@ public class GUI extends Application{
 		
 		//List of Exercises
 		ListView<Exercise> listview = new ListView<Exercise>();
-		listview.setMaxWidth(200);
+		listview.setPrefWidth(380);
+		ListView<Exercise> listNew = new ListView<Exercise>();
+		
 			for(Exercise exercise: currentUser.getExerciseList().getExercises()) {
-				listview.getItems().add(exercise);
-				System.out.println(exercise.getCaloriesBurned());
+				listNew.getItems().add(exercise);
+				
 			}
+			listview.setItems(listNew.getItems());
 			
 			TextField search = new TextField();
+			Predicate<Exercise> filter = e -> (e.getName().contains(search.getText()));
 			search.setOnKeyTyped(e ->{
+
 				ListView<Exercise> listNew = new ListView<Exercise>();
 				listview.setMaxWidth(415);
 				for(Exercise exercise: currentUser.getExerciseList().getExercises()) {
@@ -817,6 +829,14 @@ public class GUI extends Application{
 		logExercise.setOnAction(e->{
 		currentUser.getHistory().getCurrentDailyLog().addExercise(
 				listview.getSelectionModel().getSelectedItem());
+		});
+		
+		Button schedule = new Button("Schedule");
+		
+		schedule.setOnAction(e -> {
+			
+			
+			
 		});
 		
 		//Left side in vbox
@@ -877,7 +897,8 @@ public class GUI extends Application{
 		logRepExercise.setOnAction(e ->{
 			if(checkSettingInput(e, enterRReps) && checkSettingInput(e, enterRIntensity) && checkSettingInput(e, enterRCaloriesBurned))
 			{
-				Exercise exercise  = new AerobicExercise(enterRName.getText(), enterRReps.getText(), Integer.parseInt(enterRCaloriesBurned.getText()));
+				Exercise exercise  = new RepExercise(enterRName.getText(), Integer.parseInt(enterRReps.getText()), 
+						Integer.parseInt(enterRIntensity.getText()),Integer.parseInt(enterRCaloriesBurned.getText()));
 				currentUser.getExerciseList().getExercises().add(exercise);
 				listview.getItems().add(exercise);
 			}
@@ -894,10 +915,10 @@ public class GUI extends Application{
 		
 		
 		}
-	
-	private static void updateList(ListView oldList, ListView newList){
-        oldList = newList;
-    }
+		public static void updateList(ListView<Exercise> oldList, FilteredList<Exercise> filteredList){
+			oldList.setItems(filteredList);
+		}
+
 
 
 } 
