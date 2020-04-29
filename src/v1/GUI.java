@@ -3,9 +3,13 @@ package v1;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.function.Consumer;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -15,6 +19,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.Shadow;
+import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -31,9 +43,12 @@ public class GUI extends Application{
 	private static Stage stage;
 	private static BorderPane mainPane;
 	private static Pane loginPane, btnPane;
-
-
+	
 	private static User currentUser;
+	
+	private static BackgroundImage myBI= new BackgroundImage(new Image("background2.png",32,32,false,true),
+	        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(830, 500, false, false, true, true)
+	          );
 
 	/**
 	 * Main method
@@ -49,6 +64,14 @@ public class GUI extends Application{
 	public void start(Stage primaryStage) throws Exception {
 		setupGUI();
 		stage.showAndWait();
+		
+	}
+	
+	@Override
+	public void stop() {
+		FileIO.writeUserInfo(currentUser);
+        Platform.exit();
+        System.exit(0);
 	}
 
 	private static void setupGUI() {
@@ -74,7 +97,7 @@ public class GUI extends Application{
 	private static HBox makeLoginPane() {
 
 		HBox pane = new HBox();
-		pane.setStyle("-fx-background-color: #4ED6CB");
+		//pane.setStyle("-fx-background-color: #4ED6CB");
 		GridPane rightPane = new GridPane();
 		rightPane.setVisible(false);
 		VBox leftPane = new VBox();
@@ -99,10 +122,10 @@ public class GUI extends Application{
 		Label lblUserName = new Label("Username:");
 		Label lblName = new Label("Name:");
 		Label lblGender = new Label("Gender:");
-		Label lblAge = new Label("Age:");
-		Label lblHeight = new Label("Height:");
-		Label lblWeight = new Label("Weight:");
-		Label lblCalorieLimit = new Label("Daily Calorie Limit:");	
+		Label lblAge = new Label("Age (years):");
+		Label lblHeight = new Label("Height (inches):");
+		Label lblWeight = new Label("Weight (pounds):");
+		Label lblCalorieLimit = new Label("Daily Calorie Limit (cal):");	
 
 
 		Button enterBtn = new Button("Add This Profile");
@@ -153,12 +176,12 @@ public class GUI extends Application{
 		useUserBtn.setOnAction((event) -> {
 
 			if(FileIO.usernames().contains(userSelection.getValue())) {
-				currentUser = FileIO.retrieveUser(userSelection.getValue());
+				currentUser = (User)FileIO.deserialize("Admin/Users/" + userSelection.getValue() + ".ser");
 				currentUser.getHistory().logDate();
 				mainPane.setCenter(makeDashboardPane());
 				mainPane.setBottom(btnPane);
-
-
+				FileIO.logLogin(currentUser.getUsername());
+				System.out.println(currentUser.getBMI());
 			}
 			else {
 				userNotFound.setVisible(true);
@@ -195,6 +218,9 @@ public class GUI extends Application{
 
 
 		pane.getChildren().addAll(leftPane, rightPane);
+		
+		//then you set to your node
+		pane.setBackground(new Background(myBI));
 
 		return pane;	
 	}
@@ -204,19 +230,75 @@ public class GUI extends Application{
 		HBox pane = new HBox();
 		pane.setStyle("-fx-border-color: black");
 		Button historyBtn = new Button("History");
+		
+		/**
+		historyBtn.addEventHandler(MouseEvent.MOUSE_ENTERED,
+		        new EventHandler<MouseEvent>() {
+		          @Override
+		          public void handle(MouseEvent e) {
+		            historyBtn.setEffect(new Shadow(5, Color.BLUE));
+		          }
+		        });
+		historyBtn.addEventHandler(MouseEvent.MOUSE_EXITED,
+		        new EventHandler<MouseEvent>() {
+		          @Override
+		          public void handle(MouseEvent e) {
+		        	  historyBtn.setEffect(null);
+		          }
+		        });
+		**/
+
 		Button userBtn = new Button("User");
 		Button dashboardBtn = new Button("Dashboard");	
 		Button foodBtn = new Button("Food");
 		Button exerciseBtn = new Button("Exercises");
-		historyBtn.setOnAction(e -> mainPane.setCenter(makeHistoryPane()));
-		userBtn.setOnAction(e -> mainPane.setCenter(makeUserPane()));
-		dashboardBtn.setOnAction(e -> mainPane.setCenter(makeDashboardPane()));
-		foodBtn.setOnAction(e -> mainPane.setCenter(makeFoodPane()));
-		exerciseBtn.setOnAction(e -> mainPane.setCenter(makeExercisePane()));
+		historyBtn.setOnAction(e -> {
+			
+			mainPane.setCenter(makeHistoryPane());
+			historyBtn.setDisable(true);
+			userBtn.setDisable(false);
+			dashboardBtn.setDisable(false);
+			foodBtn.setDisable(false);
+			exerciseBtn.setDisable(false);
+		});
+		userBtn.setOnAction(e -> {
+			
+			mainPane.setCenter(makeUserPane());
+			historyBtn.setDisable(false);
+			userBtn.setDisable(true);
+			dashboardBtn.setDisable(false);
+			foodBtn.setDisable(false);
+			exerciseBtn.setDisable(false);
+		});
+		dashboardBtn.setOnAction(e -> {
+			
+			mainPane.setCenter(makeDashboardPane());
+			historyBtn.setDisable(false);
+			userBtn.setDisable(false);
+			dashboardBtn.setDisable(true);
+			foodBtn.setDisable(false);
+			exerciseBtn.setDisable(false);
+		});
+			foodBtn.setOnAction(e -> {mainPane.setCenter(makeFoodPane());
+			historyBtn.setDisable(false);
+			userBtn.setDisable(false);
+			dashboardBtn.setDisable(false);
+			foodBtn.setDisable(true);
+			exerciseBtn.setDisable(false);
+		});
+			exerciseBtn.setOnAction(e -> {mainPane.setCenter(makeExercisePane());
+			historyBtn.setDisable(false);
+			userBtn.setDisable(false);
+			dashboardBtn.setDisable(false);
+			foodBtn.setDisable(false);
+			exerciseBtn.setDisable(true);
+		});
 		ArrayList<Button> buttons = new ArrayList<Button>(Arrays.asList(historyBtn, userBtn, dashboardBtn, foodBtn, exerciseBtn));
 		for (Button btn : buttons) {
 			btn.setMinHeight(sH / 6);
 			btn.setMinWidth(sW / buttons.size());
+			btn.setStyle("-fx-background-insets: 0, 0, 1, 2");
+		
 		}
 		pane.getChildren().addAll(buttons);
 		return pane;
@@ -232,7 +314,9 @@ public class GUI extends Application{
 		VBox textboxes = new VBox(30);
 		VBox buttons = new VBox(30);
 		
-		allSettings.setStyle("-fx-background-color: #25BDB1");
+		
+		
+		//allSettings.setStyle("-fx-background-color: #25BDB1");
 		
 		allSettings.setAlignment(Pos.CENTER);
 		options.setAlignment(Pos.CENTER);
@@ -274,9 +358,15 @@ public class GUI extends Application{
 		wrongInput.setPrefWidth(100);
 		wrongInput.setWrapText(true);
 		
+			setName.setOnAction(e -> {currentUser.setName(changeName.getText());
+			name.setText("Name: " + currentUser.getName());
+		});
 		
-		setName.setOnAction(e -> currentUser.setName(changeName.getText()));
-		setGender.setOnAction(e -> currentUser.setGender(changeGender.getText()));
+			setGender.setOnAction(e -> {currentUser.setGender(changeGender.getText());
+			gender.setText("Gender: " + currentUser.getGender());			
+		});
+		
+		
 		setAge.setOnAction(e -> {if(checkSettingInput(e, changeAge)) {
 									currentUser.setAge(Integer.parseInt(changeAge.getText()));
 									age.setText("Age: " + currentUser.getAge());
@@ -288,6 +378,8 @@ public class GUI extends Application{
 		setHeight.setOnAction(e -> {if(checkSettingInput(e, changeHeight)) {
 									currentUser.setHeight(Integer.parseInt(changeHeight.getText()));
 									height.setText("Height: " + currentUser.getHeight());
+									currentUser.setBMI(CalculateBMI.calculate((x, y) -> ((703 * x)/(y * y)),
+											currentUser.getWeight(), Integer.parseInt(changeHeight.getText())));
 								}
 								else {
 									wrongInput.setText("The height value entered is not a number");
@@ -296,6 +388,8 @@ public class GUI extends Application{
 		setWeight.setOnAction(e -> {if(checkSettingInput(e, changeWeight)) {
 									currentUser.setWeight(Integer.parseInt(changeWeight.getText()));
 									weight.setText("Weight: " + currentUser.getWeight());
+									currentUser.setBMI(CalculateBMI.calculate((x, y) -> ((703 * x)/(y * y)),
+											Integer.parseInt(changeWeight.getText()), currentUser.getHeight()));
 								}
 								else {
 									wrongInput.setText("The weight value entered is not a number");
@@ -317,6 +411,9 @@ public class GUI extends Application{
 		allSettings.getChildren().addAll(options, textboxes, buttons, wrongInput);
 		
 		
+		
+		//then you set to your node
+		allSettings.setBackground(new Background(myBI));
 		
 		
 		return allSettings;
@@ -371,6 +468,13 @@ public class GUI extends Application{
 							foods.setText(currentUser.getHistory().retrieveDateTest(history.getValue()).foodInfo());
 							exercises.setText(currentUser.getHistory().retrieveDateTest(history.getValue()).exerciseInfo());
 							});
+		
+		
+		BackgroundImage myBI= new BackgroundImage(new Image("background2.png",32,32,false,true),
+		        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(830, 500, false, false, true, true)
+		          );
+		//then you set to your node
+		info.setBackground(new Background(myBI));
 	
 
 		return info;	
@@ -378,30 +482,119 @@ public class GUI extends Application{
 
 	private static BorderPane makeDashboardPane() {
 		BorderPane pane = new BorderPane();
-		pane.setStyle("-fx-background-color: #4ED6CB");
+
 		Label lbl = new Label("Dashboard page test!");
 		pane.setCenter(lbl);
+		//then you set to your node
+		pane.setBackground(new Background(myBI));
 		return pane;
 	}
-
+	
 	private static BorderPane makeFoodPane() {
+		
+		//Left Side
+		
+		//Search bar
+		TextField search = new TextField();
+		search.setOnKeyTyped(e ->{
+			
+			
+			
+			
+		});
+		
+		
+		//List of Food
 		ListView<FoodItem> listview = new ListView<FoodItem>();
-		if(currentUser != null) {
-			for(FoodItem food: currentUser.getFoodList().getFoods()) {
-				listview.getItems().add(food);
-			}
-		}
+		listview.setMaxWidth(200);
+		
+			//for(FoodItem food: currentUser.getFoodList().getFoods()) {
+				//listview.getItems().add(food);
+			//}
+		
+		//Button to log food
 		Button logFood = new Button("Log");
-		
-		
+		logFood.setPadding(new Insets(0,20,0,20));
 		logFood.setOnAction(e->{
 		currentUser.getHistory().getCurrentDailyLog().addFood(
 				listview.getSelectionModel().getSelectedItem());
 		});
 		
+		//Left side in vbox
+		VBox left = new VBox(search, listview, logFood);
+		
+		
+		
+		//Right side
+
+		
+		Label name = new Label("Name : ");
+		Label calories = new Label("Calories : ");
+		Label confirm = new Label();
+		
+		
+		TextField enterName = new TextField();
+		TextField enterCalories = new TextField();
+		
+		//Name
+		HBox nameField = new HBox(name, enterName);
+		
+		//Calories
+		HBox calorieField = new HBox(calories, enterCalories);
 		
 		Button addFood = new Button("Add a Food");
-		addFood.setOnAction(e->{} );
+		
+		addFood.setOnAction(e->{ 
+			if(checkSettingInput(e, enterCalories)) {
+			FoodItem food  = new FoodItem(enterName.getText(), Integer.parseInt(enterCalories.getText()));
+			if(currentUser.getFoodList().addFood(enterName.getText(), Integer.parseInt(enterCalories.getText()))) {
+				System.err.println("ALL FOOD!");
+			}
+			else {
+				System.err.println("lmao nope");
+			}
+			listview.getItems().add(food);
+			confirm.setText("The food has been successfully added!");
+			}
+			else {
+				confirm.setText("Not valid input for a food");
+			}
+			
+		} );
+		
+		//Right side VBox
+		
+		VBox right = new VBox(nameField, calorieField, addFood, confirm);
+		
+		//Hbox to house left and right
+		HBox whole = new HBox(left, right);
+		BorderPane panel = new BorderPane();
+
+		panel.setCenter(whole);
+		
+		//then you set to your node
+		panel.setBackground(new Background(myBI));
+		return panel;
+	}
+
+	private static BorderPane makeExercisePane() {
+		ListView<Exercise> listview = new ListView<Exercise>();
+		if(currentUser != null) {
+			for(Exercise exercise: currentUser.getExerciseList().getExercises()) {
+				listview.getItems().add(exercise);
+			}
+		}
+		Button logExercise = new Button("Log");
+		
+		
+		logExercise.setOnAction(e->{
+		currentUser.getHistory().getCurrentDailyLog().addExercise(
+				listview.getSelectionModel().getSelectedItem());
+		});
+		
+		
+		Button addExercise = new Button("Add an Exercise");
+		addExercise.setOnAction(e->{} );
 		
 		
 		TextField search = new TextField();
@@ -411,21 +604,15 @@ public class GUI extends Application{
 				
 		});
 		
-		HBox buttons = new HBox(logFood, addFood);
+		HBox buttons = new HBox(logExercise, addExercise);
 		VBox pane = new VBox(search, listview, buttons);
 		BorderPane panel = new BorderPane();
 		panel.setCenter(pane);
+		
+		//then you set to your node
+		panel.setBackground(new Background(myBI));
+		
 		return panel;
-	}
-
-	private static BorderPane makeExercisePane() {
-		BorderPane pane = new BorderPane();
-		pane.setStyle("-fx-background-color: #35E0FF");
-		Label lbl1 = new Label("Exercises page test!");
-		Label lbl2 = new Label("Wow!");	
-		pane.setCenter(lbl1);
-		pane.setTop(lbl2);
-		return pane;
 	}
 
 
