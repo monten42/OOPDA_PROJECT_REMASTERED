@@ -102,8 +102,10 @@ public class GUI extends Application{
         mainPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                stage.setX(event.getScreenX() - xSpot);
-                stage.setY(event.getScreenY() - ySpot);
+            	if(ySpot < 50) {
+            		stage.setX(event.getScreenX() - xSpot);
+                    stage.setY(event.getScreenY() - ySpot);
+            	}   
             }
         });
 		stage.setHeight(sW);
@@ -214,7 +216,9 @@ public class GUI extends Application{
 
 		enterBtn.setOnAction((event) -> {
 			if(FileIO.usernames().contains(txtUserName.getText())) {
-				createUserError.setText("The username entered is already taken, please enter a new username");
+				//new DuplicateFoundException(txtUserName.getText());
+				//createUserError.setText("The username entered is already taken, please enter a new username");
+				createUserError.setText((new DuplicateFoundException(txtUserName.getText())).getMessage());
 				createUserError.setVisible(true);
 				txtUserName.setPromptText(txtUserName.getText());
 				txtUserName.clear();
@@ -325,6 +329,8 @@ public class GUI extends Application{
 		currentTab.setAlignment(Pos.TOP_CENTER);
 		});
 		top.setBackground(new Background(myBI));
+		//top.setStyle("-fx-border-color: black");
+		top.setStyle("-fx-background-color: #E0FFFF");
 		top.getChildren().addAll(currentTab, close);
 		return top;
 	}
@@ -337,6 +343,16 @@ public class GUI extends Application{
 		VBox options = new VBox(40);
 		VBox textboxes = new VBox(30);
 		VBox buttons = new VBox(30);
+		
+		Button logOutBtn = new Button("Logout");
+		logOutBtn.setMinSize(100, 100);
+		
+		logOutBtn.setOnAction(e -> {
+			currentUser = null;
+			mainPane.setCenter(makeLoginPane());
+			//btnPane.setVisible(false);
+		
+		});
 		
 		
 		
@@ -428,7 +444,7 @@ public class GUI extends Application{
 							options.getChildren().addAll(name, gender, age, height, weight, calorieLimit);
 		textboxes.getChildren().addAll(changeName, changeGender, changeAge, changeHeight, changeWeight, changeCalorieLimit);
 		buttons.getChildren().addAll(setName, setGender, setAge, setHeight, setWeight, setCalorieLimit);
-		allSettings.getChildren().addAll(options, textboxes, buttons, wrongInput);
+		allSettings.getChildren().addAll(options, textboxes, buttons, wrongInput, logOutBtn);
 		
 		
 		
@@ -642,6 +658,7 @@ public class GUI extends Application{
 		listview.setMaxWidth(200);
 			for(Exercise exercise: currentUser.getExerciseList().getExercises()) {
 				listview.getItems().add(exercise);
+				System.out.println(exercise.getCaloriesBurned());
 			}
 			
 			TextField search = new TextField();
@@ -650,11 +667,11 @@ public class GUI extends Application{
 				listview.setMaxWidth(415);
 				for(Exercise exercise: currentUser.getExerciseList().getExercises()) {
 					if(exercise.getName().startsWith(search.getText())) {
-						listNew.getItems.add(exercise);
+						listNew.getItems().add(exercise);
 					}
 					
 				}
-				listview = listNew;
+				//listview = listNew;
 				
 				
 				
@@ -662,8 +679,8 @@ public class GUI extends Application{
 		
 		//Button to log exercises
 		Button logExercise = new Button("Log");
-		logFood.setPadding(new Insets(0,20,0,20));
-		logFood.setOnAction(e->{
+		logExercise.setPadding(new Insets(0,20,0,20));
+		logExercise.setOnAction(e->{
 		currentUser.getHistory().getCurrentDailyLog().addExercise(
 				listview.getSelectionModel().getSelectedItem());
 		});
@@ -695,9 +712,9 @@ public class GUI extends Application{
 			//Button for logging aerobic exercise
 		Button logAerobicExercise = new Button("Log Exercise");
 		logAerobicExercise.setOnAction(e ->{
-			if(checkSettingInput(e, enterACaloriesBurned) && enterADuration.getText().length() == 5 && enterADuration.contains(":"))
+			if(checkSettingInput(e, acaloriesBurned) && aduration.getText().length() == 5 && aduration.getText().contains(":"))
 			{
-				Exercise exercise  = new AerobicExercise(enterAName.getText(), enterADuration.getText(), integer.parseint(eneterACaloriesBurned.getText()));
+				Exercise exercise  = new AerobicExercise(aname.getText(), aduration.getText(), Integer.parseInt(acaloriesBurned.getText()));
 				currentUser.getExerciseList().getExercises().add(exercise);
 				listview.getItems().add(exercise);
 			}
@@ -713,7 +730,7 @@ public class GUI extends Application{
 		TextField enterRName = new TextField();
 		TextField enterRReps = new TextField();
 		TextField enterRIntensity = new TextField();
-		TextField enterRCaloriesBurned = new Textfield();
+		TextField enterRCaloriesBurned = new TextField();
 
 			//HBoxes for grouping
 		HBox nameGroupR = new HBox(nameR, enterRName);
@@ -726,7 +743,7 @@ public class GUI extends Application{
 		logRepExercise.setOnAction(e ->{
 			if(checkSettingInput(e, enterRReps) && checkSettingInput(e, enterRIntensity) && checkSettingInput(e, enterRCaloriesBurned))
 			{
-				Exercise exercise  = new AerobicExercise(enterAName.getText(), enterADuration.getText(), integer.parseint(eneterACaloriesBurned.getText()));
+				Exercise exercise  = new AerobicExercise(enterRName.getText(), enterRReps.getText(), Integer.parseInt(enterRCaloriesBurned.getText()));
 				currentUser.getExerciseList().getExercises().add(exercise);
 				listview.getItems().add(exercise);
 			}
@@ -738,7 +755,7 @@ public class GUI extends Application{
 		HBox whole = new HBox(left, right);
 		BorderPane panel = new BorderPane();
 		panel.setCenter(whole);
-		panel.setBackground(myBI);
+		panel.setBackground(new Background(myBI));
 		return panel;
 		
 		
