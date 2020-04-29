@@ -11,6 +11,10 @@ import java.util.ArrayList;
 public class ExerciseList implements Serializable {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5795716215122518024L;
+	/**
 	 * Stores all the exercises
 	 */
 	private ArrayList<Exercise> exercises;
