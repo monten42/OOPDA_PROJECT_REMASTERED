@@ -667,11 +667,11 @@ public class GUI extends Application{
 				listview.setMaxWidth(415);
 				for(Exercise exercise: currentUser.getExerciseList().getExercises()) {
 					if(exercise.getName().startsWith(search.getText())) {
-						listNew.getItems.add(exercise);
+						listNew.getItems().add(exercise);
 					}
 					
 				}
-				listview = listNew;
+				//listview = listNew;
 				
 				
 				
@@ -679,8 +679,8 @@ public class GUI extends Application{
 		
 		//Button to log exercises
 		Button logExercise = new Button("Log");
-		logFood.setPadding(new Insets(0,20,0,20));
-		logFood.setOnAction(e->{
+		logExercise.setPadding(new Insets(0,20,0,20));
+		logExercise.setOnAction(e->{
 		currentUser.getHistory().getCurrentDailyLog().addExercise(
 				listview.getSelectionModel().getSelectedItem());
 		});
@@ -712,9 +712,9 @@ public class GUI extends Application{
 			//Button for logging aerobic exercise
 		Button logAerobicExercise = new Button("Log Exercise");
 		logAerobicExercise.setOnAction(e ->{
-			if(checkSettingInput(e, enterACaloriesBurned) && enterADuration.getText().length() == 5 && enterADuration.contains(":"))
+			if(checkSettingInput(e, acaloriesBurned) && aduration.getText().length() == 5 && aduration.getText().contains(":"))
 			{
-				Exercise exercise  = new AerobicExercise(enterAName.getText(), enterADuration.getText(), integer.parseint(eneterACaloriesBurned.getText()));
+				Exercise exercise  = new AerobicExercise(aname.getText(), aduration.getText(), Integer.parseInt(acaloriesBurned.getText()));
 				currentUser.getExerciseList().getExercises().add(exercise);
 				listview.getItems().add(exercise);
 			}
@@ -730,7 +730,7 @@ public class GUI extends Application{
 		TextField enterRName = new TextField();
 		TextField enterRReps = new TextField();
 		TextField enterRIntensity = new TextField();
-		TextField enterRCaloriesBurned = new Textfield();
+		TextField enterRCaloriesBurned = new TextField();
 
 			//HBoxes for grouping
 		HBox nameGroupR = new HBox(nameR, enterRName);
@@ -743,7 +743,7 @@ public class GUI extends Application{
 		logRepExercise.setOnAction(e ->{
 			if(checkSettingInput(e, enterRReps) && checkSettingInput(e, enterRIntensity) && checkSettingInput(e, enterRCaloriesBurned))
 			{
-				Exercise exercise  = new AerobicExercise(enterAName.getText(), enterADuration.getText(), integer.parseint(eneterACaloriesBurned.getText()));
+				Exercise exercise  = new AerobicExercise(enterRName.getText(), enterRReps.getText(), Integer.parseInt(enterRCaloriesBurned.getText()));
 				currentUser.getExerciseList().getExercises().add(exercise);
 				listview.getItems().add(exercise);
 			}
@@ -755,7 +755,7 @@ public class GUI extends Application{
 		HBox whole = new HBox(left, right);
 		BorderPane panel = new BorderPane();
 		panel.setCenter(whole);
-		panel.setBackground(myBI);
+		panel.setBackground(new Background(myBI));
 		return panel;
 		
 		
