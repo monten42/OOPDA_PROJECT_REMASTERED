@@ -36,3 +36,6 @@ Admin/Usernames.txt
 Admin/User Log.txt
 Admin/User Log.txt.lck
 bin/.project
+bin/src/Admin/Usernames.txt
+bin/src/.project
+bin/src/.classpath
