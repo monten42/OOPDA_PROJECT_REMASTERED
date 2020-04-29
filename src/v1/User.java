@@ -34,7 +34,9 @@ public class User implements Serializable{
         this.weight = weight;
         history = new History(calorieLimit);
         schedule = new Schedule();
-        foodlist = FileIO.deserializeFoodList();	
+        foodlist = (FoodList)FileIO.deserialize("Admin//foodlist.ser");
+        exerciselist = (ExerciseList)FileIO.deserialize("Admin//exerciselist.ser");
+
         
     }
     /**
