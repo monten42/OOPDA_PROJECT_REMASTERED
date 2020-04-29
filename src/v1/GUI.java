@@ -1,5 +1,6 @@
 package v1;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -628,23 +629,23 @@ public class GUI extends Application{
 		//Left Side
 		
 		//Search bar
-		TextField search = new TextField();
-		search.setOnKeyTyped(e ->{
-			
-			
-			
-			
-		});
-		
-		
-		//List of Food
 		ListView<FoodItem> listview = new ListView<FoodItem>();
-		listview.setMaxWidth(200);
-
-			for(FoodItem food: currentUser.getFoodList().getFoods()) {
-				listview.getItems().add(food);
-			}
-
+		listview.setPrefWidth(380);
+		ListView<FoodItem> listNew = new ListView<FoodItem>();
+		
+		for(FoodItem food: currentUser.getFoodList().getFoods()) {
+			listNew.getItems().add(food);
+		}
+			listview.setItems(listNew.getItems());
+			
+			TextField search = new TextField();
+			Predicate<FoodItem> filter = e -> (e.getName().toUpperCase().contains(search.getText().toUpperCase()));
+			search.setOnKeyTyped(e ->{
+				updateList(listview,listNew.getItems().filtered(filter));
+				
+			});
+		
+		
 		
 		//Button to log food
 		Button logFood = new Button("Log");
@@ -684,12 +685,14 @@ public class GUI extends Application{
 			FoodItem food  = new FoodItem(enterName.getText(), Integer.parseInt(enterCalories.getText()));
 			if(currentUser.getFoodList().addFood(enterName.getText(), Integer.parseInt(enterCalories.getText()))) {
 				System.err.println("ALL FOOD!");
+				listNew.getItems().add(food);
+				confirm.setText("The food has been successfully added!");
 			}
 			else {
 				System.err.println("lmao nope");
 			}
-			listview.getItems().add(food);
-			confirm.setText("The food has been successfully added!");
+			
+			
 			}
 			else {
 				confirm.setText("Not valid input for a food");
@@ -806,7 +809,7 @@ public class GUI extends Application{
 			listview.setItems(listNew.getItems());
 			
 			TextField search = new TextField();
-			Predicate<Exercise> filter = e -> (e.getName().contains(search.getText()));
+			Predicate<Exercise> filter = e -> (e.getName().toUpperCase().contains(search.getText().toUpperCase()));
 			search.setOnKeyTyped(e ->{
 
 				ListView<Exercise> listNew = new ListView<Exercise>();
@@ -832,15 +835,23 @@ public class GUI extends Application{
 		});
 		
 		Button schedule = new Button("Schedule");
-		
+		Label lblStartTime = new Label("Start Time (hh:mm)");
+		TextField startTime  = new TextField();
+		ComboBox<String> amChoose = new ComboBox<String>();
+		amChoose.getItems().add("AM");
+		amChoose.getItems().add("PM");
+		HBox scheduling = new HBox(lblStartTime, startTime, amChoose, schedule);
 		schedule.setOnAction(e -> {
-			
-			
+			if(listview.getSelectionModel().getSelectedItem() instanceof Scheduleable) {
+				currentUser.getSchedule().addToSchedule(listview.getSelectionModel().getSelectedItem(), 
+						AerobicExercise.schedule((AerobicExercise)listview.getSelectionModel().getSelectedItem(), Schedule.convertToMilitary(startTime.getText(), amChoose.getSelectionModel().getSelectedItem())));
+			}
+			System.err.println(currentUser.getSchedule().toString());
 			
 		});
 		
 		//Left side in vbox
-		VBox left = new VBox(search, listview, logExercise);
+		VBox left = new VBox(search, listview,scheduling, logExercise);
 		
 		
 		
@@ -864,13 +875,13 @@ public class GUI extends Application{
 		HBox enterACaloriesBurned = new HBox(caloriesBurned, acaloriesBurned);
 		
 			//Button for logging aerobic exercise
-		Button logAerobicExercise = new Button("Log Exercise");
+		Button logAerobicExercise = new Button("Log Aerobic");
 		logAerobicExercise.setOnAction(e ->{
 			if(checkSettingInput(e, acaloriesBurned) && aduration.getText().length() == 5 && aduration.getText().contains(":"))
 			{
 				Exercise exercise  = new AerobicExercise(aname.getText(), aduration.getText(), Integer.parseInt(acaloriesBurned.getText()));
 				currentUser.getExerciseList().getExercises().add(exercise);
-				listview.getItems().add(exercise);
+				listNew.getItems().add(exercise);
 			}
 			});
 		
@@ -893,14 +904,14 @@ public class GUI extends Application{
  		HBox caloriesBurnedGroupR = new HBox(caloriesBurnedR, enterRCaloriesBurned);
 		
 			//Button for logging Rep Exercise
-		Button logRepExercise = new Button("Log Exercise");
+		Button logRepExercise = new Button("Log Rep Exercise");
 		logRepExercise.setOnAction(e ->{
 			if(checkSettingInput(e, enterRReps) && checkSettingInput(e, enterRIntensity) && checkSettingInput(e, enterRCaloriesBurned))
 			{
 				Exercise exercise  = new RepExercise(enterRName.getText(), Integer.parseInt(enterRReps.getText()), 
 						Integer.parseInt(enterRIntensity.getText()),Integer.parseInt(enterRCaloriesBurned.getText()));
 				currentUser.getExerciseList().getExercises().add(exercise);
-				listview.getItems().add(exercise);
+				listNew.getItems().add(exercise);
 			}
 			});
 		
@@ -915,7 +926,9 @@ public class GUI extends Application{
 		
 		
 		}
-		public static void updateList(ListView<Exercise> oldList, FilteredList<Exercise> filteredList){
+		
+	
+		public static void updateList(ListView oldList, FilteredList filteredList){
 			oldList.setItems(filteredList);
 		}
 
