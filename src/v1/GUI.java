@@ -572,40 +572,96 @@ public class GUI extends Application{
 	}
 
 	private static BorderPane makeExercisePane() {
+		
+		//Left Side
+		
+		//Search bar
+		TextField search = new TextField();
+		search.setOnKeyTyped(e ->{
+			
+			
+			
+			
+		});
+		
+		
+		//List of Exercises
 		ListView<Exercise> listview = new ListView<Exercise>();
-		if(currentUser != null) {
+		listview.setMaxWidth(200);
 			for(Exercise exercise: currentUser.getExerciseList().getExercises()) {
 				listview.getItems().add(exercise);
 			}
-		}
+		
+		//Button to log exercises
 		Button logExercise = new Button("Log");
-		
-		
-		logExercise.setOnAction(e->{
+		logFood.setPadding(new Insets(0,20,0,20));
+		logFood.setOnAction(e->{
 		currentUser.getHistory().getCurrentDailyLog().addExercise(
 				listview.getSelectionModel().getSelectedItem());
 		});
 		
+		//Left side in vbox
+		VBox left = new VBox(search, listview, logExercise);
 		
-		Button addExercise = new Button("Add an Exercise");
-		addExercise.setOnAction(e->{} );
 		
 		
-		TextField search = new TextField();
+		//Right side
+
+		//Aerobic Exercise
+		Label name = new Label("Name: ");
+		Label duration = new Label("Duration: ");
+		Label caloriesBurned = new Label("Calories Burned: ");
 		
-		search.setOnKeyTyped(e ->{
+		
+		TextField aname = new TextField();
+		TextField aduration = new TextField();
+		TextField acaloriesBurned = new TextField();
+
+		HBox enterAName = new HBox(name, aname);
+		HBox enterADuration = new HBox(duration, aduration);
+		HBox enterACaloriesBurned = new HBox(caloriesBurned, acaloriesBurned);
+		Button logAerobicExercise = new Button("Log Exercise");
+		logAerobicExercise.setOnAction(e ->{
+			if(checkSettingInput(e, enterACaloriesBurned) ) {
+				Exercise exercise  = new AerobicExercise();
+				if(
+		)
+		
+		//Name
+		HBox nameField = new HBox(name, enterName);
+		
+		//Calories
+		HBox calorieField = new HBox(calories, enterCalories);
+		
+		Button addFood = new Button("Add a Food");
+		
+		addFood.setOnAction(e->{ 
+
+			}
+			else {
+				System.err.println("lmao nope");
+			}
+			listview.getItems().add(food);
+			confirm.setText("The food has been successfully added!");
+			}
+			else {
+				confirm.setText("Not valid input for a food");
+			}
 			
-				
-		});
+		} );
 		
-		HBox buttons = new HBox(logExercise, addExercise);
-		VBox pane = new VBox(search, listview, buttons);
+		//Right side VBox
+		
+		VBox right = new VBox(nameField, calorieField, addFood, confirm);
+		
+		//Hbox to house left and right
+		HBox whole = new HBox(left, right);
 		BorderPane panel = new BorderPane();
-		panel.setCenter(pane);
+
+		panel.setCenter(whole);
 		
 		//then you set to your node
 		panel.setBackground(new Background(myBI));
-		
 		return panel;
 	}
 
