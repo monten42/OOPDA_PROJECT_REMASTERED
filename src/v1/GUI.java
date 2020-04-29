@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.function.Consumer;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.application.Application;
@@ -34,7 +34,6 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Border;
-
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -57,7 +56,6 @@ public class GUI extends Application{
 	private static BorderPane mainPane;
 	private static Pane loginPane, btnPane;
 	private static Label currentTab;
-
 	
 	private static User currentUser;
 	
@@ -80,14 +78,6 @@ public class GUI extends Application{
 		setupGUI();
 		stage.showAndWait();
 		
-
-	}
-	
-	@Override
-	public void stop() {
-		FileIO.writeUserInfo(currentUser);
-        Platform.exit();
-        System.exit(0);
 	}
 
 	private static void setupGUI() {
@@ -214,16 +204,12 @@ public class GUI extends Application{
 		useUserBtn.setOnAction((event) -> {
 
 			if(FileIO.usernames().contains(userSelection.getValue())) {
-
 				currentUser = (User)FileIO.deserialize("Admin//Users//" + userSelection.getValue() + ".ser");
 				currentUser.getHistory().logDate();
 				mainPane.setCenter(makeDashboardPane());
 				currentTab.setText("DASHBOARD");
 				mainPane.setBottom(btnPane);
 				FileIO.logLogin(currentUser.getUsername());
-
-				System.out.println(currentUser.getBMI());
-
 			}
 			else {
 				userNotFound.setVisible(true);
@@ -274,24 +260,6 @@ public class GUI extends Application{
 		HBox pane = new HBox();
 		pane.setStyle("-fx-border-color: black");
 		Button historyBtn = new Button("History");
-		
-		/**
-		historyBtn.addEventHandler(MouseEvent.MOUSE_ENTERED,
-		        new EventHandler<MouseEvent>() {
-		          @Override
-		          public void handle(MouseEvent e) {
-		            historyBtn.setEffect(new Shadow(5, Color.BLUE));
-		          }
-		        });
-		historyBtn.addEventHandler(MouseEvent.MOUSE_EXITED,
-		        new EventHandler<MouseEvent>() {
-		          @Override
-		          public void handle(MouseEvent e) {
-		        	  historyBtn.setEffect(null);
-		          }
-		        });
-		**/
-
 		Button userBtn = new Button("User");
 		Button dashboardBtn = new Button("Dashboard");	
 		Button foodBtn = new Button("Food");
@@ -299,9 +267,7 @@ public class GUI extends Application{
 		historyBtn.setOnAction(e -> {
 			
 			mainPane.setCenter(makeHistoryPane());
-
 			currentTab.setText("HISTORY");
-
 			historyBtn.setDisable(true);
 			userBtn.setDisable(false);
 			dashboardBtn.setDisable(false);
@@ -360,13 +326,10 @@ public class GUI extends Application{
 		Button close = new Button("Close");
 		close.setStyle("-fx-font-size: 20px");
 		close.setAlignment(Pos.TOP_RIGHT);
-		close.setOnAction(e -> {
-			if(currentUser != null) {
-				FileIO.writeUserInfo(currentUser);		
-			}
-			Platform.exit();
-			System.exit(0);
-			currentTab.setAlignment(Pos.TOP_CENTER);
+		close.setOnAction(e -> {FileIO.writeUserInfo(currentUser);
+								Platform.exit();
+								System.exit(0);
+		currentTab.setAlignment(Pos.TOP_CENTER);
 		});
 		top.setBackground(new Background(myBI));
 		//top.setStyle("-fx-border-color: black");
@@ -384,25 +347,16 @@ public class GUI extends Application{
 		VBox textboxes = new VBox(30);
 		VBox buttons = new VBox(30);
 		
-
 		Button logOutBtn = new Button("Logout");
 		logOutBtn.setMinSize(100, 100);
 		
 		logOutBtn.setOnAction(e -> {
-			FileIO.writeUserInfo(currentUser);
 			currentUser = null;
 			mainPane.setCenter(makeLoginPane());
-			mainPane.setBottom(null);
-			btnPane.getChildren().get(2).setDisable(true);
-			btnPane.getChildren().get(1).setDisable(false);
-			currentTab.setText("LOGIN");
-
-			
 			//btnPane.setVisible(false);
 		
 		});
 		
-
 		
 		
 		//allSettings.setStyle("-fx-background-color: #25BDB1");
@@ -467,8 +421,6 @@ public class GUI extends Application{
 		setHeight.setOnAction(e -> {if(checkSettingInput(e, changeHeight)) {
 									currentUser.setHeight(Integer.parseInt(changeHeight.getText()));
 									height.setText("Height: " + currentUser.getHeight());
-									currentUser.setBMI(CalculateBMI.calculate((x, y) -> ((703 * x)/(y * y)),
-											currentUser.getWeight(), Integer.parseInt(changeHeight.getText())));
 								}
 								else {
 									wrongInput.setText("The height value entered is not a number");
@@ -477,8 +429,6 @@ public class GUI extends Application{
 		setWeight.setOnAction(e -> {if(checkSettingInput(e, changeWeight)) {
 									currentUser.setWeight(Integer.parseInt(changeWeight.getText()));
 									weight.setText("Weight: " + currentUser.getWeight());
-									currentUser.setBMI(CalculateBMI.calculate((x, y) -> ((703 * x)/(y * y)),
-											Integer.parseInt(changeWeight.getText()), currentUser.getHeight()));
 								}
 								else {
 									wrongInput.setText("The weight value entered is not a number");
@@ -577,18 +527,11 @@ public class GUI extends Application{
 							}
 							});
 		
-
-		BackgroundImage myBI= new BackgroundImage(new Image("background2.png",32,32,false,true),
-		        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(830, 500, false, false, true, true)
-		          );
-		//then you set to your node
-
 		info.setBackground(new Background(myBI));
 	
 
 		return info;	
 	}
-
 
 	private static VBox makeDashboardPane() {
 		VBox pane = new VBox();
@@ -623,7 +566,7 @@ public class GUI extends Application{
 		pane.setBackground(new Background(myBI));
 		return pane;
 	}
-	
+
 	private static BorderPane makeFoodPane() {
 		
 		//Left Side
@@ -657,7 +600,6 @@ public class GUI extends Application{
 		
 		//Left side in vbox
 		VBox left = new VBox(search, listview, logFood);
-
 		
 		
 		
@@ -716,80 +658,6 @@ public class GUI extends Application{
 	}
 
 	private static BorderPane makeExercisePane() {
-		ListView<Exercise> listview = new ListView<Exercise>();
-		if(currentUser != null) {
-			for(Exercise exercise: currentUser.getExerciseList().getExercises()) {
-				listview.getItems().add(exercise);
-			}
-		}
-		Button logExercise = new Button("Log");
-		
-		
-		logExercise.setOnAction(e->{
-		currentUser.getHistory().getCurrentDailyLog().addExercise(
-				listview.getSelectionModel().getSelectedItem());
-		});
-		
-		
-		Button addExercise = new Button("Add an Exercise");
-		addExercise.setOnAction(e->{} );
-
-		
-		
-		//Right side
-
-		
-		Label name = new Label("Name : ");
-		Label calories = new Label("Calories : ");
-		Label confirm = new Label();
-		
-		
-		TextField enterName = new TextField();
-		TextField enterCalories = new TextField();
-		
-		//Name
-		HBox nameField = new HBox(name, enterName);
-		
-		//Calories
-		HBox calorieField = new HBox(calories, enterCalories);
-		
-		Button addFood = new Button("Add a Food");
-		
-		addFood.setOnAction(e->{ 
-			if(checkSettingInput(e, enterCalories)) {
-			FoodItem food  = new FoodItem(enterName.getText(), Integer.parseInt(enterCalories.getText()));
-			if(currentUser.getFoodList().addFood(enterName.getText(), Integer.parseInt(enterCalories.getText()))) {
-				System.err.println("ALL FOOD!");
-			}
-			else {
-				System.err.println("lmao nope");
-			}
-			listview.getItems().add(food);
-			confirm.setText("The food has been successfully added!");
-			}
-			else {
-				confirm.setText("Not valid input for a food");
-			}
-			
-		} );
-		
-		//Right side VBox
-		
-
-		VBox right = new VBox(nameField, calorieField, addFood, confirm);
-		
-		//Hbox to house left and right
-		HBox whole = new HBox(left, right);
-		BorderPane panel = new BorderPane();
-
-		panel.setCenter(whole);
-		
-		//then you set to your node
-		panel.setBackground(new Background(myBI));
-		return panel;
-	}
-
-	private static BorderPane makeExercisePane() {
 		
 		//Left Side
 		
@@ -811,18 +679,7 @@ public class GUI extends Application{
 			TextField search = new TextField();
 			Predicate<Exercise> filter = e -> (e.getName().toUpperCase().contains(search.getText().toUpperCase()));
 			search.setOnKeyTyped(e ->{
-
-				ListView<Exercise> listNew = new ListView<Exercise>();
-				listview.setMaxWidth(415);
-				for(Exercise exercise: currentUser.getExerciseList().getExercises()) {
-					if(exercise.getName().startsWith(search.getText())) {
-						listNew.getItems().add(exercise);
-					}
-					
-				}
-				updateList(listview, listNew);
-				
-				
+				updateList(listview,listNew.getItems().filtered(filter));
 				
 			});
 		
@@ -931,7 +788,6 @@ public class GUI extends Application{
 		public static void updateList(ListView oldList, FilteredList filteredList){
 			oldList.setItems(filteredList);
 		}
-
 
 
 } 
