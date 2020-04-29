@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -17,7 +18,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.Shadow;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -217,19 +220,75 @@ public class GUI extends Application{
 		HBox pane = new HBox();
 		pane.setStyle("-fx-border-color: black");
 		Button historyBtn = new Button("History");
+		
+		/**
+		historyBtn.addEventHandler(MouseEvent.MOUSE_ENTERED,
+		        new EventHandler<MouseEvent>() {
+		          @Override
+		          public void handle(MouseEvent e) {
+		            historyBtn.setEffect(new Shadow(5, Color.BLUE));
+		          }
+		        });
+		historyBtn.addEventHandler(MouseEvent.MOUSE_EXITED,
+		        new EventHandler<MouseEvent>() {
+		          @Override
+		          public void handle(MouseEvent e) {
+		        	  historyBtn.setEffect(null);
+		          }
+		        });
+		**/
+
 		Button userBtn = new Button("User");
 		Button dashboardBtn = new Button("Dashboard");	
 		Button foodBtn = new Button("Food");
 		Button exerciseBtn = new Button("Exercises");
-		historyBtn.setOnAction(e -> mainPane.setCenter(makeHistoryPane()));
-		userBtn.setOnAction(e -> mainPane.setCenter(makeUserPane()));
-		dashboardBtn.setOnAction(e -> mainPane.setCenter(makeDashboardPane()));
-		foodBtn.setOnAction(e -> mainPane.setCenter(makeFoodPane()));
-		exerciseBtn.setOnAction(e -> mainPane.setCenter(makeExercisePane()));
+		historyBtn.setOnAction(e -> {
+			
+			mainPane.setCenter(makeHistoryPane());
+			historyBtn.setDisable(true);
+			userBtn.setDisable(false);
+			dashboardBtn.setDisable(false);
+			foodBtn.setDisable(false);
+			exerciseBtn.setDisable(false);
+		});
+		userBtn.setOnAction(e -> {
+			
+			mainPane.setCenter(makeUserPane());
+			historyBtn.setDisable(false);
+			userBtn.setDisable(true);
+			dashboardBtn.setDisable(false);
+			foodBtn.setDisable(false);
+			exerciseBtn.setDisable(false);
+		});
+		dashboardBtn.setOnAction(e -> {
+			
+			mainPane.setCenter(makeDashboardPane());
+			historyBtn.setDisable(false);
+			userBtn.setDisable(false);
+			dashboardBtn.setDisable(true);
+			foodBtn.setDisable(false);
+			exerciseBtn.setDisable(false);
+		});
+			foodBtn.setOnAction(e -> {mainPane.setCenter(makeFoodPane());
+			historyBtn.setDisable(false);
+			userBtn.setDisable(false);
+			dashboardBtn.setDisable(false);
+			foodBtn.setDisable(true);
+			exerciseBtn.setDisable(false);
+		});
+			exerciseBtn.setOnAction(e -> {mainPane.setCenter(makeExercisePane());
+			historyBtn.setDisable(false);
+			userBtn.setDisable(false);
+			dashboardBtn.setDisable(false);
+			foodBtn.setDisable(false);
+			exerciseBtn.setDisable(true);
+		});
 		ArrayList<Button> buttons = new ArrayList<Button>(Arrays.asList(historyBtn, userBtn, dashboardBtn, foodBtn, exerciseBtn));
 		for (Button btn : buttons) {
 			btn.setMinHeight(sH / 6);
 			btn.setMinWidth(sW / buttons.size());
+			btn.setStyle("-fx-background-insets: 0, 0, 1, 2");
+		
 		}
 		pane.getChildren().addAll(buttons);
 		return pane;
@@ -409,7 +468,7 @@ public class GUI extends Application{
 
 	private static BorderPane makeDashboardPane() {
 		BorderPane pane = new BorderPane();
-		//pane.setStyle("-fx-background-color: #4ED6CB");
+
 		Label lbl = new Label("Dashboard page test!");
 		pane.setCenter(lbl);
 		//then you set to your node
@@ -456,15 +515,41 @@ public class GUI extends Application{
 	}
 
 	private static BorderPane makeExercisePane() {
-		BorderPane pane = new BorderPane();
-		//pane.setStyle("-fx-background-color: #35E0FF");
-		Label lbl1 = new Label("Exercises page test!");
-		Label lbl2 = new Label("Wow!");	
-		pane.setCenter(lbl1);
-		pane.setTop(lbl2);
+		ListView<Exercise> listview = new ListView<Exercise>();
+		if(currentUser != null) {
+			for(Exercise exercise: currentUser.getExerciseList().getExercises()) {
+				listview.getItems().add(exercise);
+			}
+		}
+		Button logExercise = new Button("Log");
+		
+		
+		logExercise.setOnAction(e->{
+		currentUser.getHistory().getCurrentDailyLog().addExercise(
+				listview.getSelectionModel().getSelectedItem());
+		});
+		
+		
+		Button addExercise = new Button("Add an Exercise");
+		addExercise.setOnAction(e->{} );
+		
+		
+		TextField search = new TextField();
+		
+		search.setOnKeyTyped(e ->{
+			
+				
+		});
+		
+		HBox buttons = new HBox(logExercise, addExercise);
+		VBox pane = new VBox(search, listview, buttons);
+		BorderPane panel = new BorderPane();
+		panel.setCenter(pane);
+		
 		//then you set to your node
-		pane.setBackground(new Background(myBI));
-		return pane;
+		panel.setBackground(new Background(myBI));
+		
+		return panel;
 	}
 
 

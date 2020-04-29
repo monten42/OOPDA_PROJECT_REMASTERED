@@ -33,26 +33,6 @@ public class FileIO {
 		}
 	}
 
-	public void newMonth(String username, int month) throws IOException{
-		String path = "Admin\\"+username;
-		String months = "month"+month+".txt";
-		new File(path+"\\Food\\"+months).createNewFile();
-		new File(path+"\\Exercise\\"+months).createNewFile();
-	}
-	public static void readUserInfo(String username) {
-		String path = "Admin\\"+username+"\\Details.txt";
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(path));
-			String detail;
-			while((detail = br.readLine()) != null) {
-				System.out.println(detail);
-			}
-			br.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 	
 	public static void writeUserInfo(User user) {
 		
@@ -84,9 +64,7 @@ public class FileIO {
 		}
 		
 	}
-	
-	
-	
+
 	
 	public static Object deserialize(String filePath) {
 		try
