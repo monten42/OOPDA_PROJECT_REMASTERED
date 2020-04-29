@@ -36,6 +36,8 @@ public class User implements Serializable{
         schedule = new Schedule();
         foodlist = (FoodList)FileIO.deserialize("Admin//foodlist.ser");
         exerciselist = (ExerciseList)FileIO.deserialize("Admin//exerciselist.ser");
+
+
         
     }
     /**
