@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -50,6 +51,14 @@ public class GUI extends Application{
 	public void start(Stage primaryStage) throws Exception {
 		setupGUI();
 		stage.showAndWait();
+		
+	}
+	
+	@Override
+	public void stop() {
+		FileIO.writeUserInfo(currentUser);
+        Platform.exit();
+        System.exit(0);
 	}
 
 	private static void setupGUI() {
@@ -385,36 +394,84 @@ public class GUI extends Application{
 	}
 
 	private static BorderPane makeFoodPane() {
+		
+		//Left Side
+		
+		//Search bar
+		TextField search = new TextField();
+		search.setOnKeyTyped(e ->{
+			
+			
+			
+			
+		});
+		
+		
+		//List of Food
 		ListView<FoodItem> listview = new ListView<FoodItem>();
-		if(currentUser != null) {
+		listview.setMaxWidth(200);
 			for(FoodItem food: currentUser.getFoodList().getFoods()) {
 				listview.getItems().add(food);
 			}
-		}
+		
+		//Button to log food
 		Button logFood = new Button("Log");
-		
-		
+		logFood.setPadding(new Insets(0,20,0,20));
 		logFood.setOnAction(e->{
 		currentUser.getHistory().getCurrentDailyLog().addFood(
 				listview.getSelectionModel().getSelectedItem());
 		});
 		
+		//Left side in vbox
+		VBox left = new VBox(search, listview, logFood);
+		
+		
+		
+		//Right side
+
+		
+		Label name = new Label("Name : ");
+		Label calories = new Label("Calories : ");
+		Label confirm = new Label();
+		
+		
+		TextField enterName = new TextField();
+		TextField enterCalories = new TextField();
+		
+		//Name
+		HBox nameField = new HBox(name, enterName);
+		
+		//Calories
+		HBox calorieField = new HBox(calories, enterCalories);
 		
 		Button addFood = new Button("Add a Food");
-		addFood.setOnAction(e->{} );
 		
-		
-		TextField search = new TextField();
-		
-		search.setOnKeyTyped(e ->{
+		addFood.setOnAction(e->{ 
+			if(checkSettingInput(e, enterCalories)) {
+			FoodItem food  = new FoodItem(enterName.getText(), Integer.parseInt(enterCalories.getText()));
+			if(currentUser.getFoodList().addFood(enterName.getText(), Integer.parseInt(enterCalories.getText()))) {
+				System.err.println("ALL FOOD!");
+			}
+			else {
+				System.err.println("lmao nope");
+			}
+			listview.getItems().add(food);
+			confirm.setText("The food has been successfully added!");
+			}
+			else {
+				confirm.setText("Not valid input for a food");
+			}
 			
-				
-		});
+		} );
 		
-		HBox buttons = new HBox(logFood, addFood);
-		VBox pane = new VBox(search, listview, buttons);
+		//Right side VBox
+		
+		VBox right = new VBox(nameField, calorieField, addFood, confirm);
+		
+		//Hbox to house left and right
+		HBox whole = new HBox(left, right);
 		BorderPane panel = new BorderPane();
-		panel.setCenter(pane);
+		panel.setCenter(whole);
 		return panel;
 	}
 
