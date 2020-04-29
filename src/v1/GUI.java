@@ -323,10 +323,13 @@ public class GUI extends Application{
 		Button close = new Button("Close");
 		close.setStyle("-fx-font-size: 20px");
 		close.setAlignment(Pos.TOP_RIGHT);
-		close.setOnAction(e -> {FileIO.writeUserInfo(currentUser);
-								Platform.exit();
-								System.exit(0);
-		currentTab.setAlignment(Pos.TOP_CENTER);
+		close.setOnAction(e -> {
+			if(currentUser != null) {
+				FileIO.writeUserInfo(currentUser);		
+			}
+			Platform.exit();
+			System.exit(0);
+			currentTab.setAlignment(Pos.TOP_CENTER);
 		});
 		top.setBackground(new Background(myBI));
 		//top.setStyle("-fx-border-color: black");
@@ -350,6 +353,7 @@ public class GUI extends Application{
 		logOutBtn.setOnAction(e -> {
 			currentUser = null;
 			mainPane.setCenter(makeLoginPane());
+			mainPane.setBottom(null);
 			//btnPane.setVisible(false);
 		
 		});
