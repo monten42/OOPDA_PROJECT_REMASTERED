@@ -634,13 +634,7 @@ public class GUI extends Application{
 		//Left Side
 		
 		//Search bar
-		TextField search = new TextField();
-		search.setOnKeyTyped(e ->{
-			
-			
-			
-			
-		});
+		
 		
 		
 		//List of Exercises
@@ -649,6 +643,22 @@ public class GUI extends Application{
 			for(Exercise exercise: currentUser.getExerciseList().getExercises()) {
 				listview.getItems().add(exercise);
 			}
+			
+			TextField search = new TextField();
+			search.setOnKeyTyped(e ->{
+				ListView<Exercise> listNew = new ListView<Exercise>();
+				listview.setMaxWidth(415);
+				for(Exercise exercise: currentUser.getExerciseList().getExercises()) {
+					if(exercise.getName().startsWith(search.getText())) {
+						listNew.getItems.add(exercise);
+					}
+					
+				}
+				listview = listNew;
+				
+				
+				
+			});
 		
 		//Button to log exercises
 		Button logExercise = new Button("Log");
