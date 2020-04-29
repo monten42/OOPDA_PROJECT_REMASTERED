@@ -24,3 +24,15 @@ src/v1/AerobicExercise.class
 /bin/
 src/v1/Exercise.class
 src/v1/Exercise.class
+*.ser
+bin/.project
+bin/fitness.mdj
+bin/README.md
+bin/src/.classpath
+bin/src/.project
+Admin/User Log.txt.2
+Admin/Usernames.txt
+*.1
+Admin/User Log.txt
+Admin/User Log.txt.lck
+bin/.project
