@@ -630,42 +630,109 @@ public class GUI extends Application{
 	}
 
 	private static BorderPane makeExercisePane() {
+		
+		//Left Side
+		
+		//Search bar
+		TextField search = new TextField();
+		search.setOnKeyTyped(e ->{
+			
+			
+			
+			
+		});
+		
+		
+		//List of Exercises
 		ListView<Exercise> listview = new ListView<Exercise>();
-		if(currentUser != null) {
+		listview.setMaxWidth(200);
 			for(Exercise exercise: currentUser.getExerciseList().getExercises()) {
 				listview.getItems().add(exercise);
 			}
-		}
+		
+		//Button to log exercises
 		Button logExercise = new Button("Log");
-		
-		
-		logExercise.setOnAction(e->{
+		logFood.setPadding(new Insets(0,20,0,20));
+		logFood.setOnAction(e->{
 		currentUser.getHistory().getCurrentDailyLog().addExercise(
 				listview.getSelectionModel().getSelectedItem());
 		});
 		
+		//Left side in vbox
+		VBox left = new VBox(search, listview, logExercise);
 		
-		Button addExercise = new Button("Add an Exercise");
-		addExercise.setOnAction(e->{} );
 		
 		
-		TextField search = new TextField();
+		//Right side
+
+		//Aerobic Exercise
 		
-		search.setOnKeyTyped(e ->{
-			
-				
-		});
 		
-		HBox buttons = new HBox(logExercise, addExercise);
-		VBox pane = new VBox(search, listview, buttons);
+			//Labels and textFields for entry
+		Label name = new Label("Name ");
+		Label duration = new Label("Duration ");
+		Label caloriesBurned = new Label("Calories Burned ");
+		
+		TextField aname = new TextField();
+		TextField aduration = new TextField();
+		TextField acaloriesBurned = new TextField();
+
+			//HBoxes for grouping
+		HBox enterAName = new HBox(name, aname);
+		HBox enterADuration = new HBox(duration, aduration);
+		HBox enterACaloriesBurned = new HBox(caloriesBurned, acaloriesBurned);
+		
+			//Button for logging aerobic exercise
+		Button logAerobicExercise = new Button("Log Exercise");
+		logAerobicExercise.setOnAction(e ->{
+			if(checkSettingInput(e, enterACaloriesBurned) && enterADuration.getText().length() == 5 && enterADuration.contains(":"))
+			{
+				Exercise exercise  = new AerobicExercise(enterAName.getText(), enterADuration.getText(), integer.parseint(eneterACaloriesBurned.getText()));
+				currentUser.getExerciseList().getExercises().add(exercise);
+				listview.getItems().add(exercise);
+			}
+			});
+		
+		//Rep exercise
+		
+		Label nameR = new Label("Name ");
+		Label repsR = new Label("Reps ");
+		Label intensityR = new Label("Intensity ");
+		Label caloriesBurnedR = new Label("Calories Burned ");
+		
+		TextField enterRName = new TextField();
+		TextField enterRReps = new TextField();
+		TextField enterRIntensity = new TextField();
+		TextField enterRCaloriesBurned = new Textfield();
+
+			//HBoxes for grouping
+		HBox nameGroupR = new HBox(nameR, enterRName);
+		HBox repsGroupR = new HBox(repsR, enterRReps);
+		HBox intensityGroupR = new HBox(intensityR, enterRIntensity);
+ 		HBox caloriesBurnedGroupR = new HBox(caloriesBurnedR, enterRCaloriesBurned);
+		
+			//Button for logging Rep Exercise
+		Button logRepExercise = new Button("Log Exercise");
+		logRepExercise.setOnAction(e ->{
+			if(checkSettingInput(e, enterRReps) && checkSettingInput(e, enterRIntensity) && checkSettingInput(e, enterRCaloriesBurned))
+			{
+				Exercise exercise  = new AerobicExercise(enterAName.getText(), enterADuration.getText(), integer.parseint(eneterACaloriesBurned.getText()));
+				currentUser.getExerciseList().getExercises().add(exercise);
+				listview.getItems().add(exercise);
+			}
+			});
+		
+		VBox right = new VBox(enterAName, enterADuration, enterACaloriesBurned, logAerobicExercise
+				,nameGroupR, repsGroupR, intensityGroupR, caloriesBurnedGroupR, logRepExercise);
+		
+		HBox whole = new HBox(left, right);
 		BorderPane panel = new BorderPane();
-		panel.setCenter(pane);
-		
-		//then you set to your node
-		panel.setBackground(new Background(myBI));
-		
+		panel.setCenter(whole);
+		panel.setBackground(myBI);
 		return panel;
-	}
+		
+		
+		}
 
 
 } 
