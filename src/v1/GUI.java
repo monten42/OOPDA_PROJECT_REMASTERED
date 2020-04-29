@@ -102,8 +102,10 @@ public class GUI extends Application{
         mainPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                stage.setX(event.getScreenX() - xSpot);
-                stage.setY(event.getScreenY() - ySpot);
+            	if(ySpot < 50) {
+            		stage.setX(event.getScreenX() - xSpot);
+                    stage.setY(event.getScreenY() - ySpot);
+            	}   
             }
         });
 		stage.setHeight(sW);
@@ -214,7 +216,9 @@ public class GUI extends Application{
 
 		enterBtn.setOnAction((event) -> {
 			if(FileIO.usernames().contains(txtUserName.getText())) {
-				createUserError.setText("The username entered is already taken, please enter a new username");
+				//new DuplicateFoundException(txtUserName.getText());
+				//createUserError.setText("The username entered is already taken, please enter a new username");
+				createUserError.setText((new DuplicateFoundException(txtUserName.getText())).getMessage());
 				createUserError.setVisible(true);
 				txtUserName.setPromptText(txtUserName.getText());
 				txtUserName.clear();
@@ -325,6 +329,8 @@ public class GUI extends Application{
 		currentTab.setAlignment(Pos.TOP_CENTER);
 		});
 		top.setBackground(new Background(myBI));
+		//top.setStyle("-fx-border-color: black");
+		top.setStyle("-fx-background-color: #E0FFFF");
 		top.getChildren().addAll(currentTab, close);
 		return top;
 	}
@@ -337,6 +343,16 @@ public class GUI extends Application{
 		VBox options = new VBox(40);
 		VBox textboxes = new VBox(30);
 		VBox buttons = new VBox(30);
+		
+		Button logOutBtn = new Button("Logout");
+		logOutBtn.setMinSize(100, 100);
+		
+		logOutBtn.setOnAction(e -> {
+			currentUser = null;
+			mainPane.setCenter(makeLoginPane());
+			//btnPane.setVisible(false);
+		
+		});
 		
 		
 		
@@ -428,7 +444,7 @@ public class GUI extends Application{
 							options.getChildren().addAll(name, gender, age, height, weight, calorieLimit);
 		textboxes.getChildren().addAll(changeName, changeGender, changeAge, changeHeight, changeWeight, changeCalorieLimit);
 		buttons.getChildren().addAll(setName, setGender, setAge, setHeight, setWeight, setCalorieLimit);
-		allSettings.getChildren().addAll(options, textboxes, buttons, wrongInput);
+		allSettings.getChildren().addAll(options, textboxes, buttons, wrongInput, logOutBtn);
 		
 		
 		
@@ -634,6 +650,7 @@ public class GUI extends Application{
 		if(currentUser != null) {
 			for(Exercise exercise: currentUser.getExerciseList().getExercises()) {
 				listview.getItems().add(exercise);
+				System.out.println(exercise.getCaloriesBurned());
 			}
 		}
 		Button logExercise = new Button("Log");
