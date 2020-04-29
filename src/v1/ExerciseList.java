@@ -82,7 +82,7 @@ public class ExerciseList implements Serializable {
 			}}
 		
 		if(noDupe) {
-			exercises.add(new AerobicExercise(name,duration, caloriesBurned));
+			exercises.add(new AerobicExercise(name, duration, caloriesBurned));
 			return noDupe;
 		}
 		else {
