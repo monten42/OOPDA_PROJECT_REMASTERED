@@ -26,6 +26,7 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -83,6 +84,7 @@ public class GUI extends Application{
 		stage.setMinHeight(sH);
 		stage.setResizable(false);
 		stage.setScene(new Scene(mainPane));
+		
 	}
 
 	private static HBox makeLoginPane() {
@@ -466,12 +468,17 @@ public class GUI extends Application{
 		return info;	
 	}
 
-	private static BorderPane makeDashboardPane() {
-		BorderPane pane = new BorderPane();
+	private static VBox makeDashboardPane() {
+		VBox pane = new VBox();
 
-		Label lbl = new Label("Dashboard page test!");
-		pane.setCenter(lbl);
-		//then you set to your node
+		Label nameLbl = new Label(currentUser.getName() + "'s Dashboard");
+		Label calLbl = new Label(currentUser.getHistory().getCurrentDailyLog().getcaloriesConsumed() + "/" + currentUser.getHistory().getCalorieLimit());
+		pane.getChildren().addAll(nameLbl, calLbl);
+	
+		
+		
+		
+		
 		pane.setBackground(new Background(myBI));
 		return pane;
 	}
