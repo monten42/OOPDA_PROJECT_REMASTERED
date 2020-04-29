@@ -83,32 +83,17 @@ public class FileIO {
 		
 	}
 	
-	public static User retrieveUser(String username) {
-		try
-		{
-		    FileInputStream fileStream = new FileInputStream("Admin\\Users\\" + username + ".ser");
-		    ObjectInputStream objectStream = new ObjectInputStream(fileStream);
-		    User user = (User) objectStream.readObject(); 
-		    objectStream.close();
-		    return user;  
-		    
-		}
-		catch (Exception e)
-		{
-		    System.out.println("Error when loading from file.");
-		    return null;
-		}
-		
-	}
 	
-	public static FoodList deserializeFoodList() {
+	
+	
+	public static Object deserialize(String filePath) {
 		try
 		{
-		    FileInputStream fileStream = new FileInputStream("Admin//foodlist.ser");
+		    FileInputStream fileStream = new FileInputStream(filePath);
 		    ObjectInputStream objectStream = new ObjectInputStream(fileStream);
-		    FoodList list = (FoodList) objectStream.readObject(); 
+		    Object obj = objectStream.readObject(); 
 		    objectStream.close();
-		    return list;  
+		    return obj;  
 		    
 		}
 		catch (Exception e)
