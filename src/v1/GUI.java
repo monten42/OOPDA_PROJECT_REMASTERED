@@ -386,9 +386,15 @@ public class GUI extends Application{
 		logOutBtn.setMinSize(100, 100);
 		
 		logOutBtn.setOnAction(e -> {
+			FileIO.writeUserInfo(currentUser);
 			currentUser = null;
 			mainPane.setCenter(makeLoginPane());
 			mainPane.setBottom(null);
+			btnPane.getChildren().get(2).setDisable(true);
+			btnPane.getChildren().get(1).setDisable(false);
+			currentTab.setText("LOGIN");
+
+			
 			//btnPane.setVisible(false);
 		
 		});
@@ -799,7 +805,7 @@ public class GUI extends Application{
 					}
 					
 				}
-				//listview = listNew;
+				updateList(listview, listNew);
 				
 				
 				
@@ -888,6 +894,10 @@ public class GUI extends Application{
 		
 		
 		}
+	
+	private static void updateList(ListView oldList, ListView newList){
+        oldList = newList;
+    }
 
 
 } 
