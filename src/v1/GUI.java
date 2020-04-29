@@ -10,10 +10,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -34,6 +37,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -299,7 +304,6 @@ public class GUI extends Application{
 			btn.setMinHeight(sH / 6);
 			btn.setMinWidth(sW / buttons.size());
 			btn.setStyle("-fx-background-insets: 0, 0, 1, 2");
-		
 		}
 		pane.getChildren().addAll(buttons);
 		return pane;
@@ -481,12 +485,31 @@ public class GUI extends Application{
 		VBox pane = new VBox();
 
 		Label nameLbl = new Label(currentUser.getName() + "'s Dashboard");
-		Label calLbl = new Label(currentUser.getHistory().getCurrentDailyLog().getcaloriesConsumed() + "/" + currentUser.getHistory().getCalorieLimit());
-		pane.getChildren().addAll(nameLbl, calLbl);
+		Label timeLbl = new Label("Today is " + currentUser.getHistory().getCurrentDailyLog().getDate().toString());
+		Label calLbl = new Label(currentUser.getHistory().getCurrentDailyLog().getcaloriesConsumed() + "/" + currentUser.getHistory().getCalorieLimit() + " Calories consumed");
+		Label calBurnLbl = new Label(currentUser.getHistory().getCurrentDailyLog().getExercises().size() +
+				" Exercises completed, " + currentUser.getHistory().getCurrentDailyLog().getCaloriesBurned() + " Calories burned");
+		pane.setAlignment(Pos.TOP_CENTER);
+		nameLbl.setFont(Font.font("Verdana", FontWeight.BOLD, 25));
+		nameLbl.setTextFill(Color.BLACK);
+		nameLbl.setPadding(new Insets(30, 0, 0, 0));
+		nameLbl.setAlignment(Pos.TOP_CENTER);
+		//nameLbl.setStyle("-fx-font: 24 arial;");
+		calLbl.setFont(Font.font("arial", 17));
+		timeLbl.setFont(Font.font("arial", FontWeight.EXTRA_BOLD, 17));
+		calBurnLbl.setFont(Font.font("arial", 17));
+		pane.setSpacing(20);
+		pane.getChildren().addAll(nameLbl, timeLbl, calLbl, calBurnLbl);
+		
+		ArrayList<PieChart.Data> foodList = new ArrayList<PieChart.Data>();
+		for(FoodItem food : currentUser.getHistory().getCurrentDailyLog().getFoodsEaten()) {
+			foodList.add(new PieChart.Data(food.getName(), food.getCalories()));
+		}
 	
-		
-		
-		
+		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(foodList);         
+		PieChart foodChart = new PieChart(pieChartData);
+        foodChart.setTitle("Calorie Breakdown");
+        pane.getChildren().add(foodChart);
 		
 		pane.setBackground(new Background(myBI));
 		return pane;
