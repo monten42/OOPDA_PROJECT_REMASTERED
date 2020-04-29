@@ -86,6 +86,13 @@ public class DailyLog implements Serializable{
 	}
 	
 	/**
+	 * Delete when finished with backend user test
+	 */
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
+	
+	/**
 	 * Formats the calorie information in a proper way
 	 * @return formatted string to be used in the GUI
 	 */
