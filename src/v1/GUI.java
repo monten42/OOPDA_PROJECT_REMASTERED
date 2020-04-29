@@ -113,10 +113,10 @@ public class GUI extends Application{
 		Label lblUserName = new Label("Username:");
 		Label lblName = new Label("Name:");
 		Label lblGender = new Label("Gender:");
-		Label lblAge = new Label("Age:");
-		Label lblHeight = new Label("Height:");
-		Label lblWeight = new Label("Weight:");
-		Label lblCalorieLimit = new Label("Daily Calorie Limit:");	
+		Label lblAge = new Label("Age (years):");
+		Label lblHeight = new Label("Height (inches):");
+		Label lblWeight = new Label("Weight (pounds):");
+		Label lblCalorieLimit = new Label("Daily Calorie Limit (cal):");	
 
 
 		Button enterBtn = new Button("Add This Profile");
