@@ -188,6 +188,6 @@ public class DailyLog implements Serializable{
     	}
     	return unique;
     }
-    
+
 
 }

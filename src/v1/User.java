@@ -200,6 +200,14 @@ public class User implements Serializable{
 	public void setExerciseList(ExerciseList newExerciseList) {
 		
 	}
+	
+	public Schedule getSchedule() {
+		return this.schedule;
+	}
+	
+	public void setSchedule(Schedule scheduleNew) {
+		this.schedule = scheduleNew;
+	}
 
 
 

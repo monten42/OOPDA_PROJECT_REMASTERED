@@ -1,12 +1,13 @@
 package v1;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.function.Consumer;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.application.Application;
@@ -34,7 +35,6 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Border;
-
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
@@ -58,7 +58,6 @@ public class GUI extends Application{
 	private static BorderPane mainPane;
 	private static Pane loginPane, btnPane;
 	private static Label currentTab;
-
 	
 	private static User currentUser;
 	
@@ -81,14 +80,6 @@ public class GUI extends Application{
 		setupGUI();
 		stage.showAndWait();
 		
-
-	}
-	
-	@Override
-	public void stop() {
-		FileIO.writeUserInfo(currentUser);
-        Platform.exit();
-        System.exit(0);
 	}
 
 	private static void setupGUI() {
@@ -215,15 +206,12 @@ public class GUI extends Application{
 		useUserBtn.setOnAction((event) -> {
 
 			if(FileIO.usernames().contains(userSelection.getValue())) {
-
 				currentUser = (User)FileIO.deserialize("Admin//Users//" + userSelection.getValue() + ".ser");
 				currentUser.getHistory().logDate();
 				mainPane.setCenter(makeDashboardPane());
 				currentTab.setText("DASHBOARD");
 				mainPane.setBottom(btnPane);
 				FileIO.logLogin(currentUser.getUsername());
-
-				//System.out.println(currentUser.getBMI());
 
 			}
 			else {
@@ -279,9 +267,7 @@ public class GUI extends Application{
 		historyBtn.setOnAction(e -> {
 			
 			mainPane.setCenter(makeHistoryPane());
-
 			currentTab.setText("HISTORY");
-
 			historyBtn.setDisable(true);
 			userBtn.setDisable(false);
 			dashboardBtn.setDisable(false);
@@ -341,13 +327,10 @@ public class GUI extends Application{
 		close.setBackground(new Background(Arrays.asList(new BackgroundFill(Color.web("#FF0000"), CornerRadii.EMPTY, Insets.EMPTY)), null));
 		close.setStyle("-fx-font-size: 20px");
 		close.setAlignment(Pos.TOP_RIGHT);
-		close.setOnAction(e -> {
-			if(currentUser != null) {
-				FileIO.writeUserInfo(currentUser);		
-			}
-			Platform.exit();
-			System.exit(0);
-			currentTab.setAlignment(Pos.TOP_CENTER);
+		close.setOnAction(e -> {FileIO.writeUserInfo(currentUser);
+								Platform.exit();
+								System.exit(0);
+		currentTab.setAlignment(Pos.TOP_CENTER);
 		});
 		top.setBackground(new Background(myBI));
 		top.setStyle("-fx-background-color: #E0FFFF");
@@ -364,14 +347,13 @@ public class GUI extends Application{
 		VBox textboxes = new VBox(30);
 		VBox buttons = new VBox(30);
 		
-
 		Button logOutBtn = new Button("Logout");
 		logOutBtn.setMinSize(100, 100);
 		
 		logOutBtn.setOnAction(e -> {
-			FileIO.writeUserInfo(currentUser);
 			currentUser = null;
 			mainPane.setCenter(makeLoginPane());
+
 			mainPane.setBottom(null);
 			btnPane.getChildren().get(2).setDisable(true);
 			btnPane.getChildren().get(1).setDisable(false);
@@ -441,8 +423,7 @@ public class GUI extends Application{
 		setHeight.setOnAction(e -> {if(checkSettingInput(e, changeHeight)) {
 									currentUser.setHeight(Integer.parseInt(changeHeight.getText()));
 									height.setText("Height: " + currentUser.getHeight());
-									//currentUser.setBMI(CalculateBMI.calculate((x, y) -> ((703 * x)/(y * y)),
-										//	currentUser.getWeight(), Integer.parseInt(changeHeight.getText())));
+
 								}
 								else {
 									wrongInput.setText("The height value entered is not a number");
@@ -451,8 +432,7 @@ public class GUI extends Application{
 		setWeight.setOnAction(e -> {if(checkSettingInput(e, changeWeight)) {
 									currentUser.setWeight(Integer.parseInt(changeWeight.getText()));
 									weight.setText("Weight: " + currentUser.getWeight());
-									//currentUser.setBMI(CalculateBMI.calculate((x, y) -> ((703 * x)/(y * y)),
-										//	Integer.parseInt(changeWeight.getText()), currentUser.getHeight()));
+
 								}
 								else {
 									wrongInput.setText("The weight value entered is not a number");
@@ -550,19 +530,19 @@ public class GUI extends Application{
 								dateInputError.setVisible(true);
 							}
 							});
-		
+
 
 		BackgroundImage myBI= new BackgroundImage(new Image("Resources\\background2.png",32,32,false,true),
 		        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(830, 500, false, false, true, true)
 		          );
 		//then you set to your node
 
+
 		info.setBackground(new Background(myBI));
 	
 
 		return info;	
 	}
-
 
 	private static VBox makeDashboardPane() {
 		VBox pane = new VBox();
@@ -597,29 +577,29 @@ public class GUI extends Application{
 		pane.setBackground(new Background(myBI));
 		return pane;
 	}
-	
+
 	private static BorderPane makeFoodPane() {
 		
 		//Left Side
 		
 		//Search bar
-		TextField search = new TextField();
-		search.setOnKeyTyped(e ->{
-			
-			
-			
-			
-		});
-		
-		
-		//List of Food
 		ListView<FoodItem> listview = new ListView<FoodItem>();
-		listview.setMaxWidth(200);
-
-			for(FoodItem food: currentUser.getFoodList().getFoods()) {
-				listview.getItems().add(food);
-			}
-
+		listview.setPrefWidth(380);
+		ListView<FoodItem> listNew = new ListView<FoodItem>();
+		
+		for(FoodItem food: currentUser.getFoodList().getFoods()) {
+			listNew.getItems().add(food);
+		}
+			listview.setItems(listNew.getItems());
+			
+			TextField search = new TextField();
+			Predicate<FoodItem> filter = e -> (e.getName().toUpperCase().contains(search.getText().toUpperCase()));
+			search.setOnKeyTyped(e ->{
+				updateList(listview,listNew.getItems().filtered(filter));
+				
+			});
+		
+		
 		
 		//Button to log food
 		Button logFood = new Button("Log");
@@ -631,7 +611,7 @@ public class GUI extends Application{
 		
 		//Left side in vbox
 		VBox left = new VBox(search, listview, logFood);
-		
+
 		//Right side
 
 		
@@ -656,12 +636,17 @@ public class GUI extends Application{
 			FoodItem food  = new FoodItem(enterName.getText(), Integer.parseInt(enterCalories.getText()));
 			if(currentUser.getFoodList().addFood(enterName.getText(), Integer.parseInt(enterCalories.getText()))) {
 				System.err.println("ALL FOOD!");
+				listNew.getItems().add(food);
+				confirm.setText("The food has been successfully added!");
+
 			}
 			else {
 				System.err.println("lmao nope");
 			}
+
 			listview.getItems().add(food);
 			confirm.setText("The food has been successfully added!");
+			
 			}
 			else {
 				confirm.setText("Not valid input for a food");
@@ -719,6 +704,7 @@ private static BorderPane makeExercisePane() {
 		});
 		
 		Button schedule = new Button("Schedule");
+
 		TextField lblStartTime = new TextField("Start Time (hh:mm)");
 		TextField startTime  = new TextField();
 		schedule.setOnAction(e -> {
@@ -727,11 +713,25 @@ private static BorderPane makeExercisePane() {
 						AerobicExercise.schedule(listview.getSelectionModel().getSelectedItem(), Schedule.convertToMilitary(startTime.getText(), ampm);
 			}
 		**/
+
+		Label lblStartTime = new Label("Start Time (hh:mm)");
+		TextField startTime  = new TextField();
+		ComboBox<String> amChoose = new ComboBox<String>();
+		amChoose.getItems().add("AM");
+		amChoose.getItems().add("PM");
+		HBox scheduling = new HBox(lblStartTime, startTime, amChoose, schedule);
+		schedule.setOnAction(e -> {
+			if(listview.getSelectionModel().getSelectedItem() instanceof Scheduleable) {
+				currentUser.getSchedule().addToSchedule(listview.getSelectionModel().getSelectedItem(), 
+						AerobicExercise.schedule((AerobicExercise)listview.getSelectionModel().getSelectedItem(), Schedule.convertToMilitary(startTime.getText(), amChoose.getSelectionModel().getSelectedItem())));
+			}
+			System.err.println(currentUser.getSchedule().toString());
+
 			
 		});
 		
 		//Left side in vbox
-		VBox left = new VBox(search, listview, logExercise);
+		VBox left = new VBox(search, listview,scheduling, logExercise);
 		
 		
 		
@@ -808,10 +808,13 @@ private static BorderPane makeExercisePane() {
 		}
 
 
-		public static void updateList(ListView<Exercise> oldList, FilteredList<Exercise> filteredList){
+
+		public static void updateList(ListView<Exercise> oldList, FilteredList<Exercise> filteredList){	
+
+		public static void updateList(ListView oldList, FilteredList filteredList){
+
 			oldList.setItems(filteredList);
 		}
-
 
 
 } 
