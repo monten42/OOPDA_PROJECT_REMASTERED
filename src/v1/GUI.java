@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.application.Application;
@@ -721,7 +720,8 @@ private static BorderPane makeExercisePane() {
 		amChoose.getItems().add("PM");
 		HBox scheduling = new HBox(lblStartTime, startTime, amChoose, schedule);
 		schedule.setOnAction(e -> {
-			if(listview.getSelectionModel().getSelectedItem() instanceof Scheduleable) {
+			if(listview.getSelectionModel().getSelectedItem() instanceof Scheduleable && amChoose.getSelectionModel().getSelectedItem() != "null" && 
+					startTime.getText().length() == 5 && startTime.getText().contains(":")) {
 				currentUser.getSchedule().addToSchedule(listview.getSelectionModel().getSelectedItem(), 
 						AerobicExercise.schedule((AerobicExercise)listview.getSelectionModel().getSelectedItem(), Schedule.convertToMilitary(startTime.getText(), amChoose.getSelectionModel().getSelectedItem())));
 			}

@@ -234,14 +234,14 @@ public class BackendTestDriver {
 
 		ExerciseList el = new ExerciseList();
 		//aerobic exercises 
-		el.addAerobicExercise("Swimming", 150, "20:00");
-		el.addAerobicExercise("Running", 250, "20:00");
-		el.addAerobicExercise("Skiing", 100, "20:00");
-		el.addAerobicExercise("Stair Stepper" , 400, "20:00");
-		el.addAerobicExercise("Yoga", 200, "20:00");
-		el.addAerobicExercise("Biking", 150, "20:00");
-		el.addAerobicExercise("Rowing", 200, "20:00");
-		el.addAerobicExercise("Elliptical", 200, "20:00");
+		el.addAerobicExercise("Swimming", 150, "01:00");
+		el.addAerobicExercise("Running", 250, "01:00");
+		el.addAerobicExercise("Skiing", 100, "01:00");
+		el.addAerobicExercise("Stair Stepper" , 400, "01:00");
+		el.addAerobicExercise("Yoga", 200, "01:00");
+		el.addAerobicExercise("Biking", 150, "01:00");
+		el.addAerobicExercise("Rowing", 200, "01:00");
+		el.addAerobicExercise("Elliptical", 200, "01:00");
 		//rep exercises
 		el.addRepExercise("Circuit Workout", 3, 9, 500);
 		el.addRepExercise("Lifting Weights", 10, 5, 300);
