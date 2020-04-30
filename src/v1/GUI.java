@@ -706,15 +706,7 @@ private static BorderPane makeExercisePane() {
 
 		TextField lblStartTime = new TextField("Start Time (hh:mm)");
 		TextField startTime  = new TextField();
-		schedule.setOnAction(e -> {
-		/**	if(listview.getSelectionModel().getSelectedItem() instanceof Scheduleable) {
-				currentUser.getSchedule().addToSchedule(listview.getSelectionModel().getSelectedItem(), 
-						AerobicExercise.schedule(listview.getSelectionModel().getSelectedItem(), Schedule.convertToMilitary(startTime.getText(), ampm);
-			}
-		**/
 
-		Label lblStartTime = new Label("Start Time (hh:mm)");
-		TextField startTime  = new TextField();
 		ComboBox<String> amChoose = new ComboBox<String>();
 		amChoose.getItems().add("AM");
 		amChoose.getItems().add("PM");
@@ -808,8 +800,6 @@ private static BorderPane makeExercisePane() {
 		}
 
 
-
-		public static void updateList(ListView<Exercise> oldList, FilteredList<Exercise> filteredList){	
 
 		public static void updateList(ListView oldList, FilteredList filteredList){
 
