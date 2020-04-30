@@ -28,6 +28,7 @@ import javafx.scene.effect.Shadow;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
@@ -35,6 +36,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Border;
 
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -60,7 +62,7 @@ public class GUI extends Application{
 	
 	private static User currentUser;
 	
-	private static BackgroundImage myBI= new BackgroundImage(new Image("background2.png",32,32,false,true),
+	private static BackgroundImage myBI= new BackgroundImage(new Image("Resources\\background2.png",32,32,false,true),
 	        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(830, 500, false, false, true, true)
 	          );
 
@@ -221,7 +223,7 @@ public class GUI extends Application{
 				mainPane.setBottom(btnPane);
 				FileIO.logLogin(currentUser.getUsername());
 
-				System.out.println(currentUser.getBMI());
+				//System.out.println(currentUser.getBMI());
 
 			}
 			else {
@@ -232,8 +234,6 @@ public class GUI extends Application{
 
 		enterBtn.setOnAction((event) -> {
 			if(FileIO.usernames().contains(txtUserName.getText())) {
-				//new DuplicateFoundException(txtUserName.getText());
-				//createUserError.setText("The username entered is already taken, please enter a new username");
 				createUserError.setText((new DuplicateFoundException(txtUserName.getText())).getMessage());
 				createUserError.setVisible(true);
 				txtUserName.setPromptText(txtUserName.getText());
@@ -268,29 +268,10 @@ public class GUI extends Application{
 		return pane;	
 	}
 
-
 	private static HBox makeButtonPane() {
 		HBox pane = new HBox();
 		pane.setStyle("-fx-border-color: black");
 		Button historyBtn = new Button("History");
-		
-		/**
-		historyBtn.addEventHandler(MouseEvent.MOUSE_ENTERED,
-		        new EventHandler<MouseEvent>() {
-		          @Override
-		          public void handle(MouseEvent e) {
-		            historyBtn.setEffect(new Shadow(5, Color.BLUE));
-		          }
-		        });
-		historyBtn.addEventHandler(MouseEvent.MOUSE_EXITED,
-		        new EventHandler<MouseEvent>() {
-		          @Override
-		          public void handle(MouseEvent e) {
-		        	  historyBtn.setEffect(null);
-		          }
-		        });
-		**/
-
 		Button userBtn = new Button("User");
 		Button dashboardBtn = new Button("Dashboard");	
 		Button foodBtn = new Button("Food");
@@ -357,6 +338,7 @@ public class GUI extends Application{
 		HBox top = new HBox(300);
 		top.setAlignment(Pos.TOP_RIGHT);
 		Button close = new Button("Close");
+		close.setBackground(new Background(Arrays.asList(new BackgroundFill(Color.web("#FF0000"), CornerRadii.EMPTY, Insets.EMPTY)), null));
 		close.setStyle("-fx-font-size: 20px");
 		close.setAlignment(Pos.TOP_RIGHT);
 		close.setOnAction(e -> {
@@ -368,7 +350,6 @@ public class GUI extends Application{
 			currentTab.setAlignment(Pos.TOP_CENTER);
 		});
 		top.setBackground(new Background(myBI));
-		//top.setStyle("-fx-border-color: black");
 		top.setStyle("-fx-background-color: #E0FFFF");
 		top.getChildren().addAll(currentTab, close);
 		return top;
@@ -396,16 +377,10 @@ public class GUI extends Application{
 			btnPane.getChildren().get(1).setDisable(false);
 			currentTab.setText("LOGIN");
 
-			
-			//btnPane.setVisible(false);
 		
 		});
 		
 
-		
-		
-		//allSettings.setStyle("-fx-background-color: #25BDB1");
-		
 		allSettings.setAlignment(Pos.CENTER);
 		options.setAlignment(Pos.CENTER);
 		textboxes.setAlignment(Pos.CENTER);
@@ -466,8 +441,8 @@ public class GUI extends Application{
 		setHeight.setOnAction(e -> {if(checkSettingInput(e, changeHeight)) {
 									currentUser.setHeight(Integer.parseInt(changeHeight.getText()));
 									height.setText("Height: " + currentUser.getHeight());
-									currentUser.setBMI(CalculateBMI.calculate((x, y) -> ((703 * x)/(y * y)),
-											currentUser.getWeight(), Integer.parseInt(changeHeight.getText())));
+									//currentUser.setBMI(CalculateBMI.calculate((x, y) -> ((703 * x)/(y * y)),
+										//	currentUser.getWeight(), Integer.parseInt(changeHeight.getText())));
 								}
 								else {
 									wrongInput.setText("The height value entered is not a number");
@@ -476,8 +451,8 @@ public class GUI extends Application{
 		setWeight.setOnAction(e -> {if(checkSettingInput(e, changeWeight)) {
 									currentUser.setWeight(Integer.parseInt(changeWeight.getText()));
 									weight.setText("Weight: " + currentUser.getWeight());
-									currentUser.setBMI(CalculateBMI.calculate((x, y) -> ((703 * x)/(y * y)),
-											Integer.parseInt(changeWeight.getText()), currentUser.getHeight()));
+									//currentUser.setBMI(CalculateBMI.calculate((x, y) -> ((703 * x)/(y * y)),
+										//	Integer.parseInt(changeWeight.getText()), currentUser.getHeight()));
 								}
 								else {
 									wrongInput.setText("The weight value entered is not a number");
@@ -577,7 +552,7 @@ public class GUI extends Application{
 							});
 		
 
-		BackgroundImage myBI= new BackgroundImage(new Image("background2.png",32,32,false,true),
+		BackgroundImage myBI= new BackgroundImage(new Image("Resources\\background2.png",32,32,false,true),
 		        BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(830, 500, false, false, true, true)
 		          );
 		//then you set to your node
@@ -610,8 +585,8 @@ public class GUI extends Application{
 		pane.getChildren().addAll(nameLbl, timeLbl, calLbl, calBurnLbl);
 		
 		ArrayList<PieChart.Data> foodList = new ArrayList<PieChart.Data>();
-		for(FoodItem food : currentUser.getHistory().getCurrentDailyLog().getFoodsEaten()) {
-			foodList.add(new PieChart.Data(food.getName(), food.getCalories()));
+		for(FoodItem food : currentUser.getHistory().getCurrentDailyLog().getUniqueFoods()) {
+			foodList.add(new PieChart.Data(currentUser.getHistory().getCurrentDailyLog().getNumberOf(food) + "x " + food.getName(), currentUser.getHistory().getCurrentDailyLog().getNumberOf(food) * food.getCalories()));
 		}
 	
 		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(foodList);         
@@ -656,9 +631,6 @@ public class GUI extends Application{
 		
 		//Left side in vbox
 		VBox left = new VBox(search, listview, logFood);
-
-		
-		
 		
 		//Right side
 
@@ -712,81 +684,7 @@ public class GUI extends Application{
 		return panel;
 	}
 
-	private static BorderPane makeExercisePane() {
-		ListView<Exercise> listview = new ListView<Exercise>();
-		if(currentUser != null) {
-			for(Exercise exercise: currentUser.getExerciseList().getExercises()) {
-				listview.getItems().add(exercise);
-			}
-		}
-		Button logExercise = new Button("Log");
-		
-		
-		logExercise.setOnAction(e->{
-		currentUser.getHistory().getCurrentDailyLog().addExercise(
-				listview.getSelectionModel().getSelectedItem());
-		});
-		
-		
-		Button addExercise = new Button("Add an Exercise");
-		addExercise.setOnAction(e->{} );
-
-		
-		
-		//Right side
-
-		
-		Label name = new Label("Name : ");
-		Label calories = new Label("Calories : ");
-		Label confirm = new Label();
-		
-		
-		TextField enterName = new TextField();
-		TextField enterCalories = new TextField();
-		
-		//Name
-		HBox nameField = new HBox(name, enterName);
-		
-		//Calories
-		HBox calorieField = new HBox(calories, enterCalories);
-		
-		Button addFood = new Button("Add a Food");
-		
-		addFood.setOnAction(e->{ 
-			if(checkSettingInput(e, enterCalories)) {
-			FoodItem food  = new FoodItem(enterName.getText(), Integer.parseInt(enterCalories.getText()));
-			if(currentUser.getFoodList().addFood(enterName.getText(), Integer.parseInt(enterCalories.getText()))) {
-				System.err.println("ALL FOOD!");
-			}
-			else {
-				System.err.println("lmao nope");
-			}
-			listview.getItems().add(food);
-			confirm.setText("The food has been successfully added!");
-			}
-			else {
-				confirm.setText("Not valid input for a food");
-			}
-			
-		} );
-		
-		//Right side VBox
-		
-
-		VBox right = new VBox(nameField, calorieField, addFood, confirm);
-		
-		//Hbox to house left and right
-		HBox whole = new HBox(left, right);
-		BorderPane panel = new BorderPane();
-
-		panel.setCenter(whole);
-		
-		//then you set to your node
-		panel.setBackground(new Background(myBI));
-		return panel;
-	}
-
-	private static BorderPane makeExercisePane() {
+private static BorderPane makeExercisePane() {
 		
 		//Left Side
 		
@@ -806,20 +704,9 @@ public class GUI extends Application{
 			listview.setItems(listNew.getItems());
 			
 			TextField search = new TextField();
-			Predicate<Exercise> filter = e -> (e.getName().contains(search.getText()));
+			Predicate<Exercise> filter = e -> (e.getName().toUpperCase().contains(search.getText().toUpperCase()));
 			search.setOnKeyTyped(e ->{
-
-				ListView<Exercise> listNew = new ListView<Exercise>();
-				listview.setMaxWidth(415);
-				for(Exercise exercise: currentUser.getExerciseList().getExercises()) {
-					if(exercise.getName().startsWith(search.getText())) {
-						listNew.getItems().add(exercise);
-					}
-					
-				}
-				updateList(listview, listNew);
-				
-				
+				updateList(listview,listNew.getItems().filtered(filter));
 				
 			});
 		
@@ -832,10 +719,14 @@ public class GUI extends Application{
 		});
 		
 		Button schedule = new Button("Schedule");
-		
+		TextField lblStartTime = new TextField("Start Time (hh:mm)");
+		TextField startTime  = new TextField();
 		schedule.setOnAction(e -> {
-			
-			
+		/**	if(listview.getSelectionModel().getSelectedItem() instanceof Scheduleable) {
+				currentUser.getSchedule().addToSchedule(listview.getSelectionModel().getSelectedItem(), 
+						AerobicExercise.schedule(listview.getSelectionModel().getSelectedItem(), Schedule.convertToMilitary(startTime.getText(), ampm);
+			}
+		**/
 			
 		});
 		
@@ -864,13 +755,13 @@ public class GUI extends Application{
 		HBox enterACaloriesBurned = new HBox(caloriesBurned, acaloriesBurned);
 		
 			//Button for logging aerobic exercise
-		Button logAerobicExercise = new Button("Log Exercise");
+		Button logAerobicExercise = new Button("Log Aerobic");
 		logAerobicExercise.setOnAction(e ->{
 			if(checkSettingInput(e, acaloriesBurned) && aduration.getText().length() == 5 && aduration.getText().contains(":"))
 			{
 				Exercise exercise  = new AerobicExercise(aname.getText(), aduration.getText(), Integer.parseInt(acaloriesBurned.getText()));
 				currentUser.getExerciseList().getExercises().add(exercise);
-				listview.getItems().add(exercise);
+				listNew.getItems().add(exercise);
 			}
 			});
 		
@@ -893,14 +784,14 @@ public class GUI extends Application{
  		HBox caloriesBurnedGroupR = new HBox(caloriesBurnedR, enterRCaloriesBurned);
 		
 			//Button for logging Rep Exercise
-		Button logRepExercise = new Button("Log Exercise");
+		Button logRepExercise = new Button("Log Rep Exercise");
 		logRepExercise.setOnAction(e ->{
 			if(checkSettingInput(e, enterRReps) && checkSettingInput(e, enterRIntensity) && checkSettingInput(e, enterRCaloriesBurned))
 			{
 				Exercise exercise  = new RepExercise(enterRName.getText(), Integer.parseInt(enterRReps.getText()), 
 						Integer.parseInt(enterRIntensity.getText()),Integer.parseInt(enterRCaloriesBurned.getText()));
 				currentUser.getExerciseList().getExercises().add(exercise);
-				listview.getItems().add(exercise);
+				listNew.getItems().add(exercise);
 			}
 			});
 		
@@ -915,6 +806,8 @@ public class GUI extends Application{
 		
 		
 		}
+
+
 		public static void updateList(ListView<Exercise> oldList, FilteredList<Exercise> filteredList){
 			oldList.setItems(filteredList);
 		}
