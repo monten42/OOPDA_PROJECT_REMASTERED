@@ -3,6 +3,8 @@ package v1;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * More accessible daily log information, before it is transferred to the History class for more concrete storage
@@ -168,5 +170,24 @@ public class DailyLog implements Serializable{
         }
         return workouts;
     }
+    
+    public int getNumberOf(FoodItem foodToCheck) {
+    	int num = 0;
+    	for(FoodItem food : foodsEaten) {
+    		if(food.equals(foodToCheck)) {
+    			num++;
+    		}
+    	}
+    	return num;
+    }
+    
+    public HashSet<FoodItem> getUniqueFoods(){
+    	HashSet<FoodItem> unique = new HashSet<FoodItem>();
+    	for(FoodItem food : foodsEaten) {
+    		unique.add(food);
+    	}
+    	return unique;
+    }
+
 
 }
