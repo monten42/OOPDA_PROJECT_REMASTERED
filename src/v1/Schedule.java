@@ -29,7 +29,14 @@ public class Schedule implements Serializable {
 	public void addToSchedule(Exercise newExercise, LocalTime[] times) {
 		boolean fits = true;
 		for(Exercise key: schedule.keySet()) {
-			if(fits == true && schedule.get(key)!= null && !(schedule.get(key)[0].isAfter(times[1]) || schedule.get(key)[1].isBefore(times[0]) )) {
+			if(
+				   (schedule.get(key)[0].isBefore(times[1]) && schedule.get(key)[1].isAfter(times[1])) 
+				|| (schedule.get(key)[0].isBefore(times[0]) && schedule.get(key)[1].isAfter(times[0]))
+				|| schedule.get(key)[0].equals(times[0]) 
+				|| schedule.get(key)[0].equals(times[1]) 
+				|| schedule.get(key)[1].equals(times[0])
+				|| schedule.get(key)[1].equals(times[1]))
+					 {
 				fits = false;
 			}
 
@@ -92,15 +99,25 @@ public class Schedule implements Serializable {
 	
 	public static LocalTime convertToMilitary(String time, String ampm) {
 		String[] times = time.split(":");
-		if(ampm.equals("am")) {
+		if(ampm.equals("AM")) {
 			return LocalTime.of(Integer.parseInt(times[0])%24, Integer.parseInt(times[1]));
 		}
-		else {
+		else if(ampm.equals("PM")) {
 			return LocalTime.of(Integer.parseInt(times[0])+ 12, Integer.parseInt(times[1]));
+		}
+		else {
+			return null;
 		}
 	}
 	
-
+	public String toString() {
+		String token = "";
+		for(Exercise exercise: this.getSchedule().keySet()) {
+			
+			token += exercise  +	"         " +this.schedule.get(exercise)[0]+ "--" +  schedule.get(exercise)[1] + "\n";
+		}
+		return token;
+	}
 	
 	
 	
